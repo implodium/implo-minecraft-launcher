@@ -1,12 +1,14 @@
 {
   "name": "minecraft-launcher",
   "version": "0.0.0",
+  "main": "main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "electron-tsc": "tsc main.ts && ng build --base-href ./ && electron ."
   },
   "private": true,
   "dependencies": {
@@ -27,7 +29,8 @@
     "@angular/cli": "~12.0.3",
     "@angular/compiler-cli": "~12.0.3",
     "@types/jasmine": "~3.6.0",
-    "@types/node": "^12.11.1",
+    "@types/node": "^14.14.33",
+    "electron": "^13.1.1",
     "jasmine-core": "~3.7.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
