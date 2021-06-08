@@ -47,6 +47,8 @@ ipcMain.on('checkInstallation', (event, args) => {
       }
     })
   }
+})
 
-  return false;
+ipcMain.on('quit', (event, args) => {
+  app.quit();
 })
