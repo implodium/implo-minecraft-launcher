@@ -15,6 +15,8 @@ function createWindow() {
     }
   });
 
+  window.webContents.openDevTools();
+
   window.loadURL(
     url.format({
       pathname: path.join(__dirname, '/dist/index.html'),
@@ -29,7 +31,7 @@ function createWindow() {
 app.on('ready', createWindow);
 app.on('window-all-closed', app.quit)
 
-ipcMain.on('checkInstallation', (event, args) => {
+ipcMain.on('checkInstallation', event => {
   if (process.platform === 'darwin') {
     fs.access("/Users/quirin/Library/ApplicationSupport/.implo-launcher", (err) => {
       if (err) {
@@ -49,6 +51,14 @@ ipcMain.on('checkInstallation', (event, args) => {
   }
 })
 
-ipcMain.on('quit', (event, args) => {
+ipcMain.on('quit', event => {
   app.quit();
+})
+
+ipcMain.on('getPath', event => {
+  if (process.platform === 'darwin') {
+    event.sender.send('getPath', "/Users/quirin/Library/ApplicationSupport/.implo-launcher")
+  } else if (process.platform === "win32") {
+    event.sender.send('getPath', "C:\\Users\\Quirin\\AppDataRoaming\\.implo-launcher")
+  }
 })
