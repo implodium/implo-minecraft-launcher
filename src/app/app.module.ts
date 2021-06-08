@@ -8,6 +8,7 @@ import {RouterModule} from "@angular/router";
 import Routes from './Routes';
 import { SetupComponent } from './components/setup/setup.component';
 import { MainComponent } from './components/main/main.component';
+import {NgxElectronModule} from "ngx-electron";
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { MainComponent } from './components/main/main.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RouterModule.forRoot(Routes)
+    RouterModule.forRoot(Routes),
+    NgxElectronModule
   ],
   providers: [],
   bootstrap: [AppComponent]
