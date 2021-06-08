@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {ElectronService} from "ngx-electron";
 import {Router} from "@angular/router";
 
@@ -9,17 +9,26 @@ import {Router} from "@angular/router";
 })
 export class MainComponent implements OnInit {
 
-  constructor(private electronService: ElectronService, private router: Router) { }
+  constructor(
+    private electronService: ElectronService,
+    private router: Router,
+    private zone: NgZone
+  ) { }
 
   ngOnInit(): void {
+    // this.router.navigate(['/setup'])
+    //   .catch(console.log)
+
     if (this.electronService.isElectronApp) {
       this.electronService.ipcRenderer.sendSync("checkInstallation");
 
       this.electronService.ipcRenderer.on('checkInstallation', (event, args) => {
-        if (!args) {
-          this.router.navigateByUrl('setup')
-            .catch(console.log)
-        }
+        this.zone.run(() => {
+          if (!args) {
+            this.router.navigate(['/setup'])
+              .catch(console.log)
+          }
+        });
       })
     }
   }
