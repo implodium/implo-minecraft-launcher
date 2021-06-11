@@ -1,5 +1,4 @@
-import {Component, NgZone, OnInit} from '@angular/core';
-import {ElectronService} from "ngx-electron";
+import {Component, OnInit} from '@angular/core';
 import {AppService} from "../services/app.service";
 import {Router} from "@angular/router";
 
@@ -10,6 +9,7 @@ import {Router} from "@angular/router";
 })
 export class SetupComponent implements OnInit {
   path = 'could not get path'
+  loading: boolean = false;
 
   constructor(
     private appService: AppService,
@@ -27,5 +27,11 @@ export class SetupComponent implements OnInit {
   }
 
   install() {
+    this.loading = true;
+    this.appService.request("installBase", () => {
+      this.router.navigate([""])
+        .then(() => this.loading = false)
+        .catch(console.log)
+    });
   }
 }
