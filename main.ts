@@ -6,7 +6,7 @@ import * as os from 'os'
 
 let window;
 const macosPath = `/Users/${os.userInfo().username}/Library/ApplicationSupport/.implo-launcher`
-const winPath = `C:\\Users\\${os.userInfo().username}\\AppDataRoaming\\.implo-launcher`
+const winPath = `C:\\Users\\${os.userInfo().username}\\AppData\\Roaming\\.implo-launcher`
 
 function createWindow() {
   window = new BrowserWindow({
@@ -18,7 +18,7 @@ function createWindow() {
     }
   });
 
-  window.webContents.openDevTools();
+  window.webContents.openDevTools()
 
   window.loadURL(
     url.format({
@@ -36,7 +36,7 @@ app.on('window-all-closed', app.quit)
 
 ipcMain.on('checkInstallation', event => {
   if (process.platform === 'darwin') {
-    fs.access("/Users/quirin/Library/ApplicationSupport/.implo-launcher", (err) => {
+    fs.access(macosPath, (err) => {
       if (err) {
         event.sender.send('checkInstallation', false);
       } else {
@@ -44,7 +44,7 @@ ipcMain.on('checkInstallation', event => {
       }
     });
   } else if (process.platform === 'win32') {
-    fs.access("C:\\Users\\Quirin\\AppDataRoaming\\.implo-launcher", (err) => {
+    fs.access(winPath, (err) => {
       if (err) {
         event.sender.send('checkInstallation', false);
       } else  {
