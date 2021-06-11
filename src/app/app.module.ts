@@ -9,13 +9,15 @@ import Routes from './Routes';
 import { SetupComponent } from './components/setup/setup.component';
 import { MainComponent } from './components/main/main.component';
 import {NgxElectronModule} from "ngx-electron";
+import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SetupComponent,
-    MainComponent
+    MainComponent,
+    LoadingScreenComponent
   ],
   imports: [
     BrowserModule,
