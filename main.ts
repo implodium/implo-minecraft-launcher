@@ -70,7 +70,33 @@ ipcMain.on('installBase', event => {
   if (process.platform === 'darwin') {
     fs.mkdir(macosPath, err => {
       if (!err) {
-        event.sender.send('installBase')
+        let filesCreated: Array<Promise<void>> = [];
+
+        filesCreated.push(new Promise((resolve, reject) =>  {
+          fs.writeFile(macosPath + "/auth.json", JSON.stringify({loggedIn: false}), err => {
+            if (!err) {
+              resolve()
+            } else {
+              reject(err)
+            }
+          })
+        }));
+
+        filesCreated.push(new Promise((resolve, reject) => {
+          fs.mkdir(macosPath + "/instances", err => {
+            if (!err) {
+              resolve()
+            } else {
+              reject(err)
+            }
+          })
+        }))
+
+        Promise.all(filesCreated)
+          .then(() => {
+            event.sender.send('installBase')
+          })
+          .catch(console.log)
       }
     })
   } else if (process.platform === 'win32') {
