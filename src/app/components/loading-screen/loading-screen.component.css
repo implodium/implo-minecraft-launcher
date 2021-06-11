@@ -4,6 +4,11 @@
   100% { transform: translateX(-10px); }
 }
 
+#container {
+  position: fixed;
+  z-index: 10;
+}
+
 #loading-container {
   height: 40vh;
   width: 40vh;
