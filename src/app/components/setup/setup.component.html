@@ -1,11 +1,16 @@
 <div id="container">
-  <h1>Setup</h1>
-  <div id="installation-wrapper">
-    <span>{{ path }}</span>
-  </div>
+  <div id="installation-container">
 
-  <div id="button-container">
-    <div id="quit-button" (click)="quit()">quit</div>
-    <div id="install-button" (click)="install()">install</div>
+    <h1>Setup</h1>
+
+    <div id="path-container">
+      <span id="path">{{ path }}</span>
+    </div>
+
+    <div id="button-container">
+      <div class="button" id="quit-button" (click)="quit()">quit</div>
+      <div class="button" id="install-button" (click)="install()">install</div>
+    </div>
+
   </div>
 </div>

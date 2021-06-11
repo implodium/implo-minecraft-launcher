@@ -1,5 +1,7 @@
 import {Component, NgZone, OnInit} from '@angular/core';
 import {ElectronService} from "ngx-electron";
+import {AppService} from "../services/app.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-setup',
@@ -7,27 +9,21 @@ import {ElectronService} from "ngx-electron";
   styleUrls: ['./setup.component.css']
 })
 export class SetupComponent implements OnInit {
-  path = ''
+  path = 'could not get path'
 
   constructor(
-    private electronService: ElectronService,
-    private zone: NgZone
+    private appService: AppService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    if (this.electronService.isElectronApp) {
-      this.electronService.ipcRenderer.send('getPath')
-
-      this.electronService.ipcRenderer.on('getPath', (event, args) => {
-        this.zone.run(() => {
-          this.path = args;
-        })
-      });
-    }
+    this.appService.request("getPath", args =>  {
+      this.path = args;
+    })
   }
 
   quit() {
-    this.electronService.ipcRenderer.send('quit')
+    this.appService.send("quit");
   }
 
   install() {
