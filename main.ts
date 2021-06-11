@@ -44,7 +44,7 @@ ipcMain.on('checkInstallation', event => {
       }
     });
   } else if (process.platform === 'win32') {
-    fs.access("C:\\Users\\Quirin\\AppDataRoaming\\.implo-launcher", (err) => {
+    fs.access("C:\\Users\\Quirin\\AppData\\Roaming\\.implo-launcher", (err) => {
       if (err) {
         event.sender.send('checkInstallation', false);
       } else  {
