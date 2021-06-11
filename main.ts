@@ -2,8 +2,11 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from "path";
 import * as url from "url";
 import * as fs from 'fs';
+import * as os from 'os'
 
 let window;
+const macosPath = `/Users/${os.userInfo().username}/Library/ApplicationSupport/.implo-launcher`
+const winPath = `C:\\Users\\${os.userInfo().username}\\AppDataRoaming\\.implo-launcher`
 
 function createWindow() {
   window = new BrowserWindow({
@@ -57,8 +60,8 @@ ipcMain.on('quit', event => {
 
 ipcMain.on('getPath', event => {
   if (process.platform === 'darwin') {
-    event.sender.send('getPath', "/Users/quirin/Library/ApplicationSupport/.implo-launcher")
+    event.sender.send('getPath', macosPath)
   } else if (process.platform === "win32") {
-    event.sender.send('getPath', "C:\\Users\\Quirin\\AppDataRoaming\\.implo-launcher")
+    event.sender.send('getPath', winPath)
   }
 })
