@@ -54,7 +54,7 @@ ipcMain.on('checkInstallation', event => {
   }
 })
 
-ipcMain.on('quit', event => {
+ipcMain.on('quit', () => {
   app.quit();
 })
 
@@ -63,5 +63,21 @@ ipcMain.on('getPath', event => {
     event.sender.send('getPath', macosPath)
   } else if (process.platform === "win32") {
     event.sender.send('getPath', winPath)
+  }
+})
+
+ipcMain.on('installBase', event => {
+  if (process.platform === 'darwin') {
+    fs.mkdir(macosPath, err => {
+      if (!err) {
+        event.sender.send('installBase')
+      }
+    })
+  } else if (process.platform === 'win32') {
+    fs.mkdir(winPath, err => {
+      if (!err) {
+        event.sender.send('installBase')
+      }
+    })
   }
 })
