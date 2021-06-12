@@ -105,7 +105,7 @@ ipcMain.on('installBase', event => {
         let filesCreated: Array<Promise<void>> = [];
 
         filesCreated.push(new Promise((resolve, reject) =>  {
-          fs.writeFile(macosPath + "\\auth.json", JSON.stringify({loggedIn: false}), err => {
+          fs.writeFile(winPath + "\\auth.json", JSON.stringify({loggedIn: false}), err => {
             if (!err) {
               resolve()
             } else {
@@ -115,7 +115,7 @@ ipcMain.on('installBase', event => {
         }));
 
         filesCreated.push(new Promise((resolve, reject) => {
-          fs.mkdir(macosPath + "\\instances", err => {
+          fs.mkdir(winPath + "\\instances", err => {
             if (!err) {
               resolve()
             } else {
