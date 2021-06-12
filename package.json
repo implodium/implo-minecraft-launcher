@@ -7,8 +7,8 @@
     "agnular:watch": "ng build --base-href ./ --watch --configuration development",
     "angular:build": "ng build --base-href ./ --configuration production",
     "electron:dev": "tsc main.ts & npm run watch & electron .",
-    "electron:package:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=release",
-    "electron:package:win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=release",
+    "electron:package:mac": "tsc main.ts && electron-packager . --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=release",
+    "electron:package:win": "tsc main.ts && electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=release",
     "package:mac": "npm run angular:build && npm run electron:package:mac",
     "package:win": "npm run angular:build && npm run electron:package:win"
   },
