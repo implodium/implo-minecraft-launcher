@@ -3,12 +3,9 @@
   "version": "0.0.0",
   "main": "main.js",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "electron": "tsc main.ts && ng build --base-href ./ && electron ."
+    "angular:start": "ng serve",
+    "agnular:watch": "ng build --base-href ./ --watch --configuration development",
+    "electron:dev": "tsc main.ts & npm run watch & electron ."
   },
   "private": true,
   "dependencies": {

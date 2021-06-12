@@ -18,7 +18,9 @@ function createWindow() {
     }
   });
 
-  window.webContents.openDevTools()
+  if (!app.isPackaged) {
+    window.webContents.openDevTools()
+  }
 
   window.loadURL(
     url.format({
