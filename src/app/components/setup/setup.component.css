@@ -1,0 +1,63 @@
+#installation-container {
+  height: 60vh;
+  width: 60vh;
+  background-color: white;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#path-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 50%;
+  width: 100%;
+}
+
+#path {
+  background-color: #e7ecf3;
+  padding: 1vh;
+
+  max-width: 80%;
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+
+#button-container {
+  height: 10%;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.button {
+  height: 90%;
+  width: 20%;
+
+  color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #152836;
+  cursor: pointer;
+
+  box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+  -moz-box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+}
+
+#install-button {
+  background-color: #42b983;
+}
+
+#quit-button {
+  background-color: #C02942;
+}

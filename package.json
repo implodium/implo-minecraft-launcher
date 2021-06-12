@@ -3,12 +3,14 @@
   "version": "0.0.0",
   "main": "main.js",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "electron-tsc": "tsc main.ts && ng build --base-href ./ && electron ."
+    "angular:start": "ng serve",
+    "agnular:watch": "ng build --base-href ./ --watch --configuration development",
+    "angular:build": "ng build --base-href ./ --configuration production",
+    "electron:dev": "tsc main.ts & npm run watch & electron .",
+    "electron:package:mac": "tsc main.ts && electron-packager . --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=release",
+    "electron:package:win": "tsc main.ts && electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=release",
+    "package:mac": "npm run angular:build && npm run electron:package:mac",
+    "package:win": "npm run angular:build && npm run electron:package:win"
   },
   "private": true,
   "dependencies": {
@@ -20,6 +22,8 @@
     "@angular/platform-browser": "~12.0.3",
     "@angular/platform-browser-dynamic": "~12.0.3",
     "@angular/router": "~12.0.3",
+    "electron-packager": "^15.2.0",
+    "ngx-electron": "^2.2.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"

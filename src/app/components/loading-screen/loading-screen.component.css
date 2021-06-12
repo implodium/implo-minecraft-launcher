@@ -1,0 +1,30 @@
+@keyframes loading-animation {
+  0%   { transform: translateX(-10px); }
+  50%  { transform: translateX(10px); }
+  100% { transform: translateX(-10px); }
+}
+
+#container {
+  position: fixed;
+  z-index: 10;
+}
+
+#loading-container {
+  height: 40vh;
+  width: 40vh;
+  background-color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#loading-icon {
+  border-radius: 100%;
+  width: 1vh;
+  height: 1vh;
+  background-color: gray;
+  animation-name: loading-animation;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
