@@ -20,6 +20,9 @@ export default class ElectronController {
             }
         });
 
+        this._window.removeMenu()
+        app.dock.hide()
+
         if (!app.isPackaged) {
             this._window.webContents.openDevTools()
         }
