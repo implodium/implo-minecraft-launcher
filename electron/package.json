@@ -1,13 +1,16 @@
 {
   "name": "implo-launcher-electron",
   "version": "1.0.0",
+  "main": "../dist/electron/index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc && electron .."
+    "dev": "tsc && electron .",
+    "clean": "cd .. && rm -rf release",
+    "package:mac": "npm run clean && tsc && electron-packager . --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=../release",
+    "package:win": "npm run clean && tsc && electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=../release"
   },
-  "dependencies": {
+  "devDependencies": {
     "electron": "^13.1.2",
-    "electron-packager": "^15.2.0",
-    "typescript": "^4.3.2"
+    "electron-packager": "^15.2.0"
   }
 }

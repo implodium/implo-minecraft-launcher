@@ -1,14 +1,9 @@
 {
   "name": "implo-launcher",
   "version": "1.0.0",
-  "main": "dist/electron/index.js",
+  "workspaces": ["electron", "angular"],
   "scripts": {
-    "electron:dev": "tsc main.ts & npm run watch & application .",
-    "electron:package:mac": "tsc main.ts && electron-packager . --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=release",
-    "electron:package:win": "tsc main.ts && electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=release",
-    "package:mac": "npm run angular:build && npm run electron:package:mac",
-    "package:win": "npm run angular:build && npm run electron:package:win"
-  },
-  "dependencies": {
+    "package:mac": "(cd angular && npm run build) && (cd electron && npm run package:mac)",
+    "package:win": "(cd angular && npm run build) && (cd electron && npm run package:win)"
   }
 }
