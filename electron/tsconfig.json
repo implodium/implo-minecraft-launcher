@@ -7,6 +7,7 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "baseUrl": "../application",
+    "target": "es2017",
     "paths": {
       "*": [
         "../node_modules/*"
