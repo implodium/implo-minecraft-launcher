@@ -1,5 +1,5 @@
 import ElectronController from "./control/ElectronController";
-import {app, ipcMain} from "electron";
+import {app, ipcMain, IpcMainEvent} from "electron";
 import FileController from "./control/FileController";
 
 export default class App {
@@ -12,24 +12,40 @@ export default class App {
 
         app.on('window-all-closed', app.quit)
 
-        ipcMain.on('checkInstallation', event => {
+        this.registerFunction('checkInstallation', (event, resolve) => {
             this.fileController.checkInstallation()
-                .then(isInstalled => event.sender.send('checkInstallation', isInstalled))
+                .then(isInstalled => resolve(isInstalled))
                 .catch(console.log)
         })
 
-        ipcMain.on('quit', () => {
+        this.registerFunction('quit', () => {
             app.quit();
         })
 
-        ipcMain.on('getPath', event => {
-            event.sender.send('getPath', this.fileController.installPath.toString())
+        this.registerFunction('getPath', (event, resolve) => {
+            resolve(this.fileController.installPath.toString())
         })
 
-        ipcMain.on('installBase', event => {
+        this.registerFunction('installBase', (event, resolve, reject) => {
             this.fileController.installBase()
-                .then(() => event.sender.send('installBase'))
-                .catch(console.log);
+                .then(() => resolve(null))
+                .catch(err => reject(err));
+        })
+    }
+
+    registerFunction(
+        name: string,
+        functionCallBack: (
+            event: IpcMainEvent,
+            resolve: (value: any) => void,
+            reject: (err: Error) => void
+        ) => void
+    ): void {
+        ipcMain.on(name, (event: IpcMainEvent) => {
+            new Promise((resolve, reject) => {
+                functionCallBack(event, resolve, reject)
+            })
+                .then(value => event.sender.send(name, value))
         })
     }
 }
