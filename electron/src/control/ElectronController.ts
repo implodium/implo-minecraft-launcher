@@ -33,7 +33,7 @@ export default class ElectronController {
         );
 
         this._window.on('closed', () => {
-            window = null
+            app.quit()
         });
 
         return this._window
