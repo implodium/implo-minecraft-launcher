@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "workspaces": ["electron", "angular"],
   "scripts": {
+    "init": "npm run angular:watch",
+    "start": "npm run electron:dev",
+    "angular:watch": "(cd angular && npm run watch)",
+    "electron:dev": "(cd electron && npm run dev)",
     "package:mac": "(cd angular && npm run build) && (cd electron && npm run package:mac)",
     "package:win": "(cd angular && npm run build) && (cd electron && npm run package:win)"
   }
