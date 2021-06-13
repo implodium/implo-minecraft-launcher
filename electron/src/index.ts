@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import {BrowserWindow, app, ipcMain} from 'electron'
 import * as path from "path";
 import * as url from "url";
 import * as fs from 'fs';
@@ -24,13 +24,15 @@ function createWindow() {
 
   window.loadURL(
     url.format({
-      pathname: path.join(__dirname, '/dist/index.html'),
+      pathname: path.join(__dirname, '../../angular/index.html'),
       protocol: 'file',
       slashes: true
     })
   );
 
-  window.on('closed', () => window = null);
+  window.on('closed', () => {
+    window = null
+  });
 }
 
 app.on('ready', createWindow);

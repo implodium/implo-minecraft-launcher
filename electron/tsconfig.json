@@ -2,7 +2,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "../dist/electron",
+    "outDir": "../dist/electron/src",
     "module": "commonjs",
     "noImplicitAny": true,
     "sourceMap": true,

@@ -1,7 +1,7 @@
 {
   "name": "implo-launcher-electron",
   "version": "1.0.0",
-  "main": "../dist/electron/index.js",
+  "main": "../dist/electron/src/index.js",
   "scripts": {
     "build": "tsc",
     "dev": "tsc && electron .",
