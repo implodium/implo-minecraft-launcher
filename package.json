@@ -1,46 +1,13 @@
 {
-  "name": "minecraft-launcher",
-  "version": "0.0.0",
-  "main": "main.js",
+  "name": "implo-launcher",
+  "version": "1.0.0",
+  "workspaces": ["electron", "angular"],
   "scripts": {
-    "angular:start": "ng serve",
-    "agnular:watch": "ng build --base-href ./ --watch --configuration development",
-    "angular:build": "ng build --base-href ./ --configuration production",
-    "electron:dev": "tsc main.ts & npm run watch & electron .",
-    "electron:package:mac": "tsc main.ts && electron-packager . --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=release",
-    "electron:package:win": "tsc main.ts && electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=release",
-    "package:mac": "npm run angular:build && npm run electron:package:mac",
-    "package:win": "npm run angular:build && npm run electron:package:win"
-  },
-  "private": true,
-  "dependencies": {
-    "@angular/animations": "~12.0.3",
-    "@angular/common": "~12.0.3",
-    "@angular/compiler": "~12.0.3",
-    "@angular/core": "~12.0.3",
-    "@angular/forms": "~12.0.3",
-    "@angular/platform-browser": "~12.0.3",
-    "@angular/platform-browser-dynamic": "~12.0.3",
-    "@angular/router": "~12.0.3",
-    "electron-packager": "^15.2.0",
-    "ngx-electron": "^2.2.0",
-    "rxjs": "~6.6.0",
-    "tslib": "^2.1.0",
-    "zone.js": "~0.11.4"
-  },
-  "devDependencies": {
-    "@angular-devkit/build-angular": "~12.0.3",
-    "@angular/cli": "~12.0.3",
-    "@angular/compiler-cli": "~12.0.3",
-    "@types/jasmine": "~3.6.0",
-    "@types/node": "^14.14.33",
-    "electron": "^13.1.1",
-    "jasmine-core": "~3.7.0",
-    "karma": "~6.3.0",
-    "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage": "~2.0.3",
-    "karma-jasmine": "~4.0.0",
-    "karma-jasmine-html-reporter": "^1.5.0",
-    "typescript": "~4.2.3"
+    "init": "npm run angular:watch",
+    "start": "npm run electron:dev",
+    "angular:watch": "(cd angular && npm run watch)",
+    "electron:dev": "(cd electron && npm run dev)",
+    "package:mac": "(cd angular && npm run build) && (cd electron && npm run package:mac)",
+    "package:win": "(cd angular && npm run build) && (cd electron && npm run package:win)"
   }
 }
