@@ -12,7 +12,7 @@
     "angular:watch": "(cd angular && npm run watch)",
     "electron:dev": "(cd electron && npm run dev)",
     "package:mac": "(cd angular && npm run build) && (cd electron && npm run package:mac)",
-    "package:win": "(cd angular && npm run build && cd ..) && (cd electron && npm run package:mac && cd ..)"
+    "package:win": "(cd angular && npm run build && cd ..) && (cd electron && npm run package:win && cd ..)"
   },
   "devDependencies": {
     "electron": "^13.1.2",
