@@ -18,6 +18,8 @@ export default class FileController {
                         fs.writeFile(this.installPath.relativeToPath('launcher-config.json'), JSON.stringify({
                             modPacks: {
                                 summer2021: {
+                                    name: 'Summer 2021',
+                                    logo: 'img/summer2021.png',
                                     installUrl: "https://drive.google.com/file/d/1Y1Nn7Nh1y_D8-u1-ioJmHHCbzM7WnSlk/view?usp=sharing",
                                     mineCraftOpt: {
                                         created: "1970-01-01T00:00:00.000Z",
@@ -25,7 +27,7 @@ export default class FileController {
                                         icon: "Furnace",
                                         javaArgs: "-Xmx8G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M",
                                         lastVersionId: "forge",
-                                        name: "sumer2021",
+                                        name: "summer2021",
                                         type: "custom"
                                     }
                                 }
@@ -78,4 +80,14 @@ export default class FileController {
         }
     }
 
+    getLastModPack(): any {
+        fs.readFile(this.installPath.relativeToPath("launcher-config.json"), 'utf8', (err, data) => {
+            if (!err) {
+                const object = JSON.parse(data);
+                return object[object.lastModPack];
+            } else {
+                return err;
+            }
+        })
+    }
 }
