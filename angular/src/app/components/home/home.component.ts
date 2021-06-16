@@ -11,6 +11,7 @@ export class HomeComponent implements OnInit {
   modPackName: string = 'invalid Name';
   logoSrc: string = "";
   imageFound: boolean = true
+  modPackId: string = "";
 
   constructor(private app: AppService) { }
 
@@ -18,6 +19,7 @@ export class HomeComponent implements OnInit {
     this.app.request('getLastModPack', modPackConfig => {
       this.modPackName = modPackConfig.name;
       this.logoSrc = modPackConfig.logo;
+      this.modPackId = modPackConfig.id;
 
       this.app.request('checkModPackInstallation', isInstalled => {
         this.installed = isInstalled;
@@ -29,4 +31,9 @@ export class HomeComponent implements OnInit {
       return `assets/${this.logoSrc}`
   }
 
+  installMinecraftModPack() {
+    this.app.request('installMinecraftModPack', () => {
+      this.installed = true;
+    }, this.modPackId)
+  }
 }
