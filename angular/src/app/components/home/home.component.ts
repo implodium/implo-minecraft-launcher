@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AppService} from "../services/app.service";
 
 @Component({
   selector: 'app-home',
@@ -10,9 +11,13 @@ export class HomeComponent implements OnInit {
   modPackName: string = 'invalid Name';
   logoSrc: string = 'img/logo.png';
 
-  constructor() { }
+  constructor(private app: AppService) { }
 
   ngOnInit(): void {
+    this.app.request('getLastModPack', args => {
+      this.modPackName = args.name;
+      this.logoSrc = args.logo;
+    })
   }
 
   get logoPath(): string {

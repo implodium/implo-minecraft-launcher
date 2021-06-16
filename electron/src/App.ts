@@ -32,8 +32,10 @@ export default class App {
                 .catch(err => reject(err));
         })
 
-        this.registerFunction('getLastModPack', (event, resolve) => {
-            resolve(this.fileController.getLastModPack());
+        this.registerFunction('getLastModPack', (event, resolve, reject) => {
+            this.fileController.getLastModPack()
+                .then(resolve)
+                .catch(reject)
         })
     }
 
