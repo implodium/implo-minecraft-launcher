@@ -94,4 +94,17 @@ export default class FileController {
             })
         })
     }
+
+    checkModPackInstallation(name: string): Promise<boolean> {
+        return new Promise(resolve => {
+            fs.access(this.installPath.relativeToPath(`instances/${name}`), (err: any) => {
+                if (!err) {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                }
+            })
+        })
+
+    }
 }
