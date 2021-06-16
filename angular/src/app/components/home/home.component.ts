@@ -9,7 +9,8 @@ import {AppService} from "../services/app.service";
 export class HomeComponent implements OnInit {
   installed: boolean = false;
   modPackName: string = 'invalid Name';
-  logoSrc: string = 'img/logo.png';
+  logoSrc: string = "";
+  imageFound: boolean = true
 
   constructor(private app: AppService) { }
 
@@ -21,7 +22,7 @@ export class HomeComponent implements OnInit {
   }
 
   get logoPath(): string {
-    return `assets/${this.logoSrc}`
+      return `assets/${this.logoSrc}`
   }
 
 }

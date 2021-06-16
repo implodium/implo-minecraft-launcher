@@ -1,6 +1,6 @@
 <div id="container">
   <div id="free-container">
-    <img *ngIf="logoPath" [src]="logoPath" alt="image not found">
+    <img *ngIf="imageFound" [src]="logoPath" alt="" (error)="this.imageFound = false">
     <h1>{{ modPackName }}</h1>
   </div>
 
