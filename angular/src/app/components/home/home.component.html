@@ -1,1 +1,11 @@
-<p>home works!</p>
+<div id="container">
+  <div id="free-container">
+    <img *ngIf="logoPath" [src]="logoPath" alt="image not found">
+    <h1>{{ modPackName }}</h1>
+  </div>
+
+  <div id="navigation">
+    <div *ngIf="installed" id="play-button" class="button">Play</div>
+    <div *ngIf="!installed" id="install-button" class="button">Install</div>
+  </div>
+</div>

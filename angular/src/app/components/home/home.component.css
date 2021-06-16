@@ -1,0 +1,37 @@
+#container {
+  flex-direction: column;
+}
+
+#navigation {
+  height: 20vh;
+  width: 100%;
+
+  background-color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#free-container {
+  height: 80vh;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+}
+
+.button {
+  padding: 3vh 5vh;
+  color: white;
+  background-color: #42b983;
+
+  box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+  -moz-box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
+
+  cursor: pointer;
+}
