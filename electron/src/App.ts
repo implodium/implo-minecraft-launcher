@@ -37,6 +37,10 @@ export default class App {
                 .then(resolve)
                 .catch(reject)
         })
+
+        this.registerFunction('checkModPackInstallation', (event, resolve, reject, args) => {
+            console.log(args)
+        })
     }
 
     registerFunction(
@@ -44,12 +48,13 @@ export default class App {
         functionCallBack: (
             event: IpcMainEvent,
             resolve: (value: any) => void,
-            reject: (err: Error) => void
+            reject: (err: Error) => void,
+            args: any
         ) => void
     ): void {
-        ipcMain.on(name, (event: IpcMainEvent) => {
+        ipcMain.on(name, (event: IpcMainEvent, args: any) => {
             new Promise((resolve, reject) => {
-                functionCallBack(event, resolve, reject)
+                functionCallBack(event, resolve, reject, args)
             })
                 .then(value => event.sender.send(name, value))
         })

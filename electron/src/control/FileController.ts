@@ -18,6 +18,7 @@ export default class FileController {
                         fs.writeFile(this.installPath.relativeToPath('launcher-config.json'), JSON.stringify({
                             modPacks: {
                                 summer2021: {
+                                    id: "summer2021",
                                     name: 'Summer 2021',
                                     logo: 'img/summer2021.jpg',
                                     installUrl: "https://drive.google.com/file/d/1Y1Nn7Nh1y_D8-u1-ioJmHHCbzM7WnSlk/view?usp=sharing",

@@ -15,9 +15,13 @@ export class HomeComponent implements OnInit {
   constructor(private app: AppService) { }
 
   ngOnInit(): void {
-    this.app.request('getLastModPack', args => {
-      this.modPackName = args.name;
-      this.logoSrc = args.logo;
+    this.app.request('getLastModPack', modPackConfig => {
+      this.modPackName = modPackConfig.name;
+      this.logoSrc = modPackConfig.logo;
+
+      this.app.request('checkModPackInstallation', isInstalled => {
+        this.installed = isInstalled;
+      }, modPackConfig.id)
     })
   }
 
