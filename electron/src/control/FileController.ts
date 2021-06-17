@@ -84,12 +84,34 @@ export default class FileController {
     }
 
     getLastModPack(): Promise<any> {
+        return new Promise(resolve => {
+            this.launcherConfiguration
+                .then((configuration: any) => {
+                    const modPackConfig = configuration.modPacks[configuration.lastModPack];
+                    resolve(modPackConfig)
+                })
+        })
+    }
+
+    getModPackConfigurationById(id: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.launcherConfiguration
+                .then((configuration: any) => {
+                    const modPackConfig = configuration.modPacks[id];
+                    if (modPackConfig != null) {
+                        resolve(configuration.modPacks[id])
+                    } else {
+                        reject()
+                    }
+                })
+        })
+    }
+
+    get launcherConfiguration(): any {
         return new Promise((resolve, reject) => {
             fs.readFile(this.installPath.relativeToPath("launcher-config.json"), 'utf8', (err, data) => {
                 if (!err) {
-                    const object = JSON.parse(data);
-                    const modPackConfig = object.modPacks[object.lastModPack];
-                    resolve(modPackConfig)
+                    resolve(JSON.parse(data))
                 } else {
                     reject(err)
                 }
