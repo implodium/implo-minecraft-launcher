@@ -2,6 +2,7 @@ import * as os from "os";
 import Path from "../uitl/Path";
 import * as fs from "fs";
 import * as wget from 'wget-improved'
+import App from "../App";
 const fsExtra = require('fs-extra')
 const zip = require('onezip')
 
@@ -15,6 +16,8 @@ export default class FileController {
         mac: new Path(`/Users/${os.userInfo().username}/Library/ApplicationSupport/minecraft/`),
         win: new Path(`C:\\Users\\${os.userInfo().username}\\AppData\\Roaming\\.minecraft\\`)
     }
+
+    private installPercentage: number = 0
 
     installBase(): Promise<void[]> {
         let finished: Array<Promise<void>> = []
@@ -258,5 +261,10 @@ export default class FileController {
                 }
             )
         })
+    }
+
+    addInstallPercentage(percentage: number) {
+        this.installPercentage += percentage
+        App.app.send('installPercentage', percentage)
     }
 }

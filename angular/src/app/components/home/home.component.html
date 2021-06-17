@@ -5,7 +5,24 @@
   </div>
 
   <div id="navigation">
-    <div *ngIf="installed" id="play-button" (click)="installMinecraftModPack()" class="button">Play</div>
-    <div *ngIf="!installed" id="install-button" (click)="installMinecraftModPack()" class="button">Install</div>
+    <div *ngIf="installationState === InstallationState.installed"
+         id="play-button"
+         (click)="installMinecraftModPack()"
+         class="button">
+      Play
+    </div>
+
+    <div *ngIf="installationState === InstallationState.installing"
+         id="percentage-button"
+         class="button">
+      {{percentage}} %
+    </div>
+
+    <div *ngIf="installationState === InstallationState.notInstalled"
+         id="install-button"
+         (click)="installMinecraftModPack()"
+         class="button">
+      Install
+    </div>
   </div>
 </div>
