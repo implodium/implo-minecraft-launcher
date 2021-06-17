@@ -45,8 +45,8 @@ export default class App {
         })
 
         this.registerFunction('installMinecraftModPack', (event, resolve, reject, args) => {
-            this.fileController.installMinecraftModPack(args)
-            this.fileController.writeConfigurationIntoMinecraftLauncher(args)
+            // this.fileController.installMinecraftModPack(args)
+            // this.fileController.writeConfigurationIntoMinecraftLauncher(args)
             this.fileController.copyVersionIntoMinecraftHome(args)
         })
     }

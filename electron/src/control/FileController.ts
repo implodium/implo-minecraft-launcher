@@ -210,9 +210,11 @@ export default class FileController {
                     }
                 )
 
-                const libraryName = '1.12.2-14.23.5.2855'
+                // 1.12.2-forge-14.23.5.2855
+                const versionNameFragments = config.mineCraftOpt.lastVersionId.split('-')
+                const libraryName = `${versionNameFragments[0]}-${versionNameFragments[2]}`
+                console.log(libraryName)
                 const libraryPath = `${versionPath}/lib/${libraryName}`
-
 
                 fsExtra.copy(
                     this.installPath.relativeToPath(`instances/${modPackId}/${libraryPath}`),
