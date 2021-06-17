@@ -31,6 +31,33 @@ export default class App {
                 .then(() => resolve(null))
                 .catch(err => reject(err));
         })
+
+        this.registerFunction('getLastModPack', (event, resolve, reject) => {66
+            this.fileController.getLastModPack()
+                .then(resolve)
+                .catch(reject)
+        })
+
+        this.registerFunction('checkModPackInstallation', (event, resolve, reject, args) => {
+            this.fileController.checkModPackInstallation(args)
+                .then(resolve)
+                .catch(console.log)
+        })
+
+        this.registerFunction('installMinecraftModPack', (event, resolve, reject, args) => {
+            const finished: Array<Promise<any>> = []
+
+            this.fileController.installMinecraftModPack(args, event)
+                .then(() => {
+                    finished.push(this.fileController.writeConfigurationIntoMinecraftLauncher(args, event))
+                    finished.push(this.fileController.copyFilesIntoMinecraftHome(args, event))
+
+                    Promise.all(finished)
+                        .then(resolve)
+                        .catch(reject)
+                })
+                .catch(console.log)
+        })
     }
 
     registerFunction(
@@ -38,14 +65,16 @@ export default class App {
         functionCallBack: (
             event: IpcMainEvent,
             resolve: (value: any) => void,
-            reject: (err: Error) => void
+            reject: (err: Error) => void,
+            args: any
         ) => void
     ): void {
-        ipcMain.on(name, (event: IpcMainEvent) => {
+        ipcMain.on(name, (event: IpcMainEvent, args: any) => {
             new Promise((resolve, reject) => {
-                functionCallBack(event, resolve, reject)
+                functionCallBack(event, resolve, reject, args)
             })
                 .then(value => event.sender.send(name, value))
+                .catch(console.log)
         })
     }
 }
