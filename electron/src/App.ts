@@ -50,7 +50,7 @@ export default class App {
             this.fileController.installMinecraftModPack(args)
                 .then(() => {
                     finished.push(this.fileController.writeConfigurationIntoMinecraftLauncher(args))
-                    finished.push(this.fileController.copyVersionIntoMinecraftHome(args))
+                    finished.push(this.fileController.copyFilesIntoMinecraftHome(args))
 
                     Promise.all(finished)
                         .then(resolve)

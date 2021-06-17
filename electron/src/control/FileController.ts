@@ -203,56 +203,60 @@ export default class FileController {
         })
     }
 
-    copyVersionIntoMinecraftHome(modPackId: string): Promise<void> {
+    copyFilesIntoMinecraftHome(modPackId: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.getModPackConfigurationById(modPackId)
                 .then((config: any) => {
                     const finished = new Array<Promise<void>>();
                     const versionPath = `versions/${config.mineCraftOpt.lastVersionId}`
 
-                    finished.push(new Promise((copyResolve, copyReject) => {
-                        fsExtra.copy(
-                            this.installPath.relativeToPath(`instances/${modPackId}/${versionPath}`),
-                            this.minecraftHomePath.relativeToPath(`${versionPath}`),
-                            (err: any) => {
-                                if (err) {
-                                    copyReject(err)
-                                } else {
-                                    console.log("copied version")
-                                    copyResolve(err)
-                                }
-                            }
-                        )
-                    }))
-
-                    // 1.12.2-forge-14.23.5.2855
-                    const versionNameFragments = config.mineCraftOpt.lastVersionId.split('-')
-                    const libraryName = `${versionNameFragments[0]}-${versionNameFragments[2]}`
-                    console.log(libraryName)
-                    const libraryPath = `${versionPath}/lib/${libraryName}`
-
-                    finished.push(new Promise((copyResolve, copyReject) => {
-                        fsExtra.copy(
-                            this.installPath.relativeToPath(`instances/${modPackId}/${libraryPath}`),
-                            this.minecraftHomePath.relativeToPath(`libraries/net/minecraftforge/forge/${libraryName}`),
-                            (err: any) => {
-                                if (err) {
-                                    copyReject(err)
-                                } else {
-                                    copyResolve()
-                                    console.log("copied library")
-                                }
-                            }
-                        )
-                    }))
+                    finished.push(this.copyVersionIntoMinecraftHome(modPackId, config, versionPath))
+                    finished.push(this.copyVersionLibrariesIntoMinecraftHome(modPackId, config, versionPath))
 
                     Promise.all(finished)
                         .then(() => resolve())
                         .catch(reject)
-
                 })
                 .catch(reject)
         })
 
+    }
+
+    copyVersionLibrariesIntoMinecraftHome(modPackId: string, config: any, versionPath: string): Promise<void> {
+        const versionNameFragments = config.mineCraftOpt.lastVersionId.split('-')
+        const libraryName = `${versionNameFragments[0]}-${versionNameFragments[2]}`
+        const libraryPath = `${versionPath}/lib/${libraryName}`
+
+        return new Promise<void>((copyResolve, copyReject) => {
+            fsExtra.copy(
+                this.installPath.relativeToPath(`instances/${modPackId}/${libraryPath}`),
+                this.minecraftHomePath.relativeToPath(`libraries/net/minecraftforge/forge/${libraryName}`),
+                (err: any) => {
+                    if (err) {
+                        copyReject(err)
+                    } else {
+                        copyResolve()
+                        console.log("copied library")
+                    }
+                }
+            )
+        })
+    }
+
+    copyVersionIntoMinecraftHome(modPackId: string, config: any, versionPath: string): Promise<void> {
+        return new Promise((copyResolve, copyReject) => {
+            fsExtra.copy(
+                this.installPath.relativeToPath(`instances/${modPackId}/${versionPath}`),
+                this.minecraftHomePath.relativeToPath(`${versionPath}`),
+                (err: any) => {
+                    if (err) {
+                        copyReject(err)
+                    } else {
+                        console.log("copied version")
+                        copyResolve(err)
+                    }
+                }
+            )
+        })
     }
 }
