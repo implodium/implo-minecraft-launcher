@@ -132,10 +132,10 @@ export default class FileController {
 
     }
 
-    installMinecraftModpack(args: string) {
-        this.getLastModPack()
-            .then(modPack => {
-                wget.download(modPack.installUrl, `${modPack.mineCraftOpt.gameDir}.zip`)
+    installMinecraftModPack(id: string) {
+        this.getModPackConfigurationById(id)
+            .then(modPackConfig => {
+                wget.download(modPackConfig.installUrl, `${modPackConfig.mineCraftOpt.gameDir}.zip`)
                     .on('error', err => {
                         console.log(err)
                     })
@@ -144,7 +144,7 @@ export default class FileController {
                     })
                     .on('end', output => {
                         console.log(output)
-                        const extract = zip.extract(`${modPack.mineCraftOpt.gameDir}.zip`, `${modPack.mineCraftOpt.gameDir}/..`)
+                        const extract = zip.extract(`${modPackConfig.mineCraftOpt.gameDir}.zip`, `${modPackConfig.mineCraftOpt.gameDir}/..`)
                         extract.on('end', () => {
                             console.log('finished extracting')
                         })
