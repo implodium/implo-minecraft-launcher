@@ -5,8 +5,8 @@
     "build": "tsc && cp -r node_modules ../dist/electron",
     "dev": "npm run build && electron ..",
     "clean": "cd .. && rm -rf release",
-    "package:mac": "npm run clean && tsc && electron-packager .. --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=../release",
-    "package:win": "npm run clean && tsc && electron-packager .. --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=../release"
+    "package:mac": "npm run clean && npm run build && electron-packager .. --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=../release",
+    "package:win": "npm run clean && npm run build && electron-packager .. --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=../release"
   },
   "devDependencies": {
     "typescript": "^4.3.2"
