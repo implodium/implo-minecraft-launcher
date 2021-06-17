@@ -45,9 +45,18 @@ export default class App {
         })
 
         this.registerFunction('installMinecraftModPack', (event, resolve, reject, args) => {
+            const finished: Array<Promise<any>> = []
+
             this.fileController.installMinecraftModPack(args)
-            this.fileController.writeConfigurationIntoMinecraftLauncher(args)
-            this.fileController.copyVersionIntoMinecraftHome(args)
+                .then(() => {
+                    finished.push(this.fileController.writeConfigurationIntoMinecraftLauncher(args))
+                    finished.push(this.fileController.copyVersionIntoMinecraftHome(args))
+
+                    Promise.all(finished)
+                        .then(resolve)
+                        .catch(reject)
+                })
+                .catch(console.log)
         })
     }
 
@@ -65,6 +74,7 @@ export default class App {
                 functionCallBack(event, resolve, reject, args)
             })
                 .then(value => event.sender.send(name, value))
+                .catch(console.log)
         })
     }
 }

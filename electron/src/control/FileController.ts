@@ -147,88 +147,112 @@ export default class FileController {
     }
 
     installMinecraftModPack(id: string) {
-        this.getModPackConfigurationById(id)
-            .then(modPackConfig => {
-                wget.download(modPackConfig.installUrl, `${modPackConfig.mineCraftOpt.gameDir}.zip`)
-                    .on('error', err => {
-                        console.log(err)
-                    })
-                    .on('progress', percentage => {
-                        console.log(percentage * 100)
-                    })
-                    .on('end', () => {
-                        zip.extract(`${modPackConfig.mineCraftOpt.gameDir}.zip`, `${modPackConfig.mineCraftOpt.gameDir}/..`)
-                            .on('end', () => {
-                                console.log('finished extracting')
-                                this.copyVersionIntoMinecraftHome(id)
-                            })
-                            .on('error', (error: any) => {
-                                console.error(error);
-                            })
-                            .on('progress', (percentage:any) => {
-                                console.log(percentage * 100)
-                            })
-                    })
-            })
-            .catch(console.log)
+        return new Promise<void>((resolve, reject) => {
+            this.getModPackConfigurationById(id)
+                .then(modPackConfig => {
+                    wget.download(modPackConfig.installUrl, `${modPackConfig.mineCraftOpt.gameDir}.zip`)
+                        .on('error', err => {
+                            reject(err)
+                        })
+                        .on('progress', percentage => {
+                            console.log(percentage * 100)
+                        })
+                        .on('end', () => {
+                            zip.extract(`${modPackConfig.mineCraftOpt.gameDir}.zip`, `${modPackConfig.mineCraftOpt.gameDir}/..`)
+                                .on('end', () => {
+                                    resolve()
+                                })
+                                .on('error', (error: any) => {
+                                    reject(error)
+                                })
+                                .on('progress', (percentage:any) => {
+                                    console.log(percentage * 100)
+                                })
+                        })
+                })
+                .catch(console.log)
+        })
     }
 
-    writeConfigurationIntoMinecraftLauncher(modPackId: string) {
-        this.getModPackConfigurationById(modPackId)
-            .then(modPackConfig => {
-                const launcherProfilesPath = this.minecraftHomePath.relativeToPath('launcher_profiles.json')
-                fs.readFile(launcherProfilesPath, 'utf8', (err ,launcherProfiles) => {
-                    const launcherProfilesObject = JSON.parse(launcherProfiles)
+    writeConfigurationIntoMinecraftLauncher(modPackId: string): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            this.getModPackConfigurationById(modPackId)
+                .then(modPackConfig => {
+                    const launcherProfilesPath = this.minecraftHomePath.relativeToPath('launcher_profiles.json')
+                    fs.readFile(launcherProfilesPath, 'utf8', (err ,launcherProfiles) => {
+                        if (err) {
+                            reject(err)
+                        } else {
+                            const launcherProfilesObject = JSON.parse(launcherProfiles)
 
-                    launcherProfilesObject.profiles[modPackConfig.id] = modPackConfig.mineCraftOpt
+                            launcherProfilesObject.profiles[modPackConfig.id] = modPackConfig.mineCraftOpt
 
-                    fs.writeFile(launcherProfilesPath, JSON.stringify(launcherProfilesObject), err => {
-                        console.log(err)
-                        console.log("wrote config into minecraft launcher config")
+                            fs.writeFile(launcherProfilesPath, JSON.stringify(launcherProfilesObject), err => {
+                                if (err) {
+                                    reject(err)
+                                } else {
+                                    console.log("wrote config into minecraft launcher config")
+                                    resolve();
+                                }
+                            })
+                        }
                     })
                 })
-            })
-            .catch(console.log)
+                .catch(console.log)
 
+        })
     }
 
-    copyVersionIntoMinecraftHome(modPackId: string) {
+    copyVersionIntoMinecraftHome(modPackId: string): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            this.getModPackConfigurationById(modPackId)
+                .then((config: any) => {
+                    const finished = new Array<Promise<void>>();
+                    const versionPath = `versions/${config.mineCraftOpt.lastVersionId}`
 
-        this.getModPackConfigurationById(modPackId)
-            .then((config: any) => {
-                const versionPath = `versions/${config.mineCraftOpt.lastVersionId}`
+                    finished.push(new Promise((copyResolve, copyReject) => {
+                        fsExtra.copy(
+                            this.installPath.relativeToPath(`instances/${modPackId}/${versionPath}`),
+                            this.minecraftHomePath.relativeToPath(`${versionPath}`),
+                            (err: any) => {
+                                if (err) {
+                                    copyReject(err)
+                                } else {
+                                    console.log("copied version")
+                                    copyResolve(err)
+                                }
+                            }
+                        )
+                    }))
 
-                fsExtra.copy(
-                    this.installPath.relativeToPath(`instances/${modPackId}/${versionPath}`),
-                    this.minecraftHomePath.relativeToPath(`${versionPath}`),
-                    (err: any) => {
-                        if (err) {
-                            console.log(err)
-                        } else {
-                            console.log("copied version")
-                        }
-                    }
-                )
+                    // 1.12.2-forge-14.23.5.2855
+                    const versionNameFragments = config.mineCraftOpt.lastVersionId.split('-')
+                    const libraryName = `${versionNameFragments[0]}-${versionNameFragments[2]}`
+                    console.log(libraryName)
+                    const libraryPath = `${versionPath}/lib/${libraryName}`
 
-                // 1.12.2-forge-14.23.5.2855
-                const versionNameFragments = config.mineCraftOpt.lastVersionId.split('-')
-                const libraryName = `${versionNameFragments[0]}-${versionNameFragments[2]}`
-                console.log(libraryName)
-                const libraryPath = `${versionPath}/lib/${libraryName}`
+                    finished.push(new Promise((copyResolve, copyReject) => {
+                        fsExtra.copy(
+                            this.installPath.relativeToPath(`instances/${modPackId}/${libraryPath}`),
+                            this.minecraftHomePath.relativeToPath(`libraries/net/minecraftforge/forge/${libraryName}`),
+                            (err: any) => {
+                                if (err) {
+                                    copyReject(err)
+                                } else {
+                                    copyResolve()
+                                    console.log("copied library")
+                                }
+                            }
+                        )
+                    }))
 
-                fsExtra.copy(
-                    this.installPath.relativeToPath(`instances/${modPackId}/${libraryPath}`),
-                    this.minecraftHomePath.relativeToPath(`libraries/net/minecraftforge/forge/${libraryName}`),
-                    (err: any) => {
-                        if (err) {
-                            console.log(err)
-                        } else {
-                            console.log("copied library")
-                        }
-                    }
-                )
+                    Promise.all(finished)
+                        .then(() => resolve())
+                        .catch(reject)
 
-            })
-            .catch(console.log)
+                })
+                .catch(reject)
+        })
+
     }
 }
