@@ -29,7 +29,7 @@ export default class FileController {
                                     id: "summer2021",
                                     name: 'Summer 2021',
                                     logo: 'img/summer2021.jpg',
-                                    installUrl: "https://github.com/QuirinEcker/summer2021/releases/download/1.2/summer2021.zip",
+                                    installUrl: "https://github.com/QuirinEcker/summer2021/releases/download/1.5/summer2021.zip",
                                     mineCraftOpt: {
                                         created: "1970-01-01T00:00:00.000Z",
                                         gameDir: this.installPath.relativeToPath('instances/summer2021'),
@@ -206,6 +206,22 @@ export default class FileController {
                             console.log(err)
                         } else {
                             console.log("copied version")
+                        }
+                    }
+                )
+
+                const libraryName = '1.12.2-14.23.5.2855'
+                const libraryPath = `${versionPath}/lib/${libraryName}`
+
+
+                fsExtra.copy(
+                    this.installPath.relativeToPath(`instances/${modPackId}/${libraryPath}`),
+                    this.minecraftHomePath.relativeToPath(`libraries/net/minecraftforge/forge/${libraryName}`),
+                    (err: any) => {
+                        if (err) {
+                            console.log(err)
+                        } else {
+                            console.log("copied library")
                         }
                     }
                 )
