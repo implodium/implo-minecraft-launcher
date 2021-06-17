@@ -10,6 +10,11 @@ export default class FileController {
         win: new Path(`C:\\Users\\${os.userInfo().username}\\AppData\\Roaming\\.implo-launcher\\`)
     }
 
+    private readonly mineCraftHomePaths = {
+        mac: new Path(`/Users/${os.userInfo().username}/Library/ApplicationSupport/minecraft/`),
+        win: new Path(`C:\\Users\\${os.userInfo().username}\\AppData\\Roaming\\.minecraft\\`)
+    }
+
     installBase(): Promise<void[]> {
         let finished: Array<Promise<void>> = []
         finished.push(new Promise((resolve, reject) => {
@@ -83,6 +88,14 @@ export default class FileController {
         }
     }
 
+    get minecraftHomePath(): Path {
+        if (process.platform === 'darwin') {
+            return this.mineCraftHomePaths.mac
+        } else if (process.platform === 'win32') {
+            return this.mineCraftHomePaths.win
+        }
+    }
+
     getLastModPack(): Promise<any> {
         return new Promise(resolve => {
             this.launcherConfiguration
@@ -150,5 +163,24 @@ export default class FileController {
                     })
             })
             .catch(console.log)
+    }
+
+    writeConfigurationIntoMinecraftLauncher(modPackId: string) {
+        this.getModPackConfigurationById(modPackId)
+            .then(modPackConfig => {
+                const launcherProfilesPath = this.minecraftHomePath.relativeToPath('launcher_profiles.json')
+                fs.readFile(launcherProfilesPath, 'utf8', (err ,launcherProfiles) => {
+                    const launcherProfilesObject = JSON.parse(launcherProfiles)
+
+                    launcherProfilesObject.profiles[modPackConfig.id] = modPackConfig.mineCraftOpt
+
+                    fs.writeFile(launcherProfilesPath, JSON.stringify(launcherProfilesObject), err => {
+                        console.log(err)
+                        console.log("wrote config into minecraft launcher config")
+                    })
+                })
+            })
+            .catch(console.log)
+
     }
 }
