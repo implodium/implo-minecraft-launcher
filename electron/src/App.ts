@@ -43,6 +43,10 @@ export default class App {
                 .then(resolve)
                 .catch(console.log)
         })
+
+        this.registerFunction('installMinecraftModPack', (event, resolve, reject, args) => {
+            this.fileController.installMinecraftModpack(args)
+        })
     }
 
     registerFunction(

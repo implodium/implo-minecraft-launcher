@@ -1,6 +1,8 @@
 import * as os from "os";
 import Path from "../uitl/Path";
 import * as fs from "fs";
+import * as wget from 'wget-improved'
+const zip = require('onezip')
 
 export default class FileController {
     private readonly installationPaths = {
@@ -21,10 +23,10 @@ export default class FileController {
                                     id: "summer2021",
                                     name: 'Summer 2021',
                                     logo: 'img/summer2021.jpg',
-                                    installUrl: "https://drive.google.com/file/d/1Y1Nn7Nh1y_D8-u1-ioJmHHCbzM7WnSlk/view?usp=sharing",
+                                    installUrl: "https://github.com/QuirinEcker/summer2021/releases/download/1.0/summer2021.zip",
                                     mineCraftOpt: {
                                         created: "1970-01-01T00:00:00.000Z",
-                                        gameDir: this.installPath.relativeToPath('instances/sumer2021'),
+                                        gameDir: this.installPath.relativeToPath('instances/summer2021'),
                                         icon: "Furnace",
                                         javaArgs: "-Xmx8G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M",
                                         lastVersionId: "forge",
@@ -106,5 +108,30 @@ export default class FileController {
             })
         })
 
+    }
+
+    installMinecraftModpack(args: string) {
+        this.getLastModPack()
+            .then(modPack => {
+                wget.download(modPack.installUrl, `${modPack.mineCraftOpt.gameDir}.zip`)
+                    .on('error', err => {
+                        console.log(err)
+                    })
+                    .on('progress', percentage => {
+                        console.log(percentage * 100     + "%")
+                    })
+                    .on('end', output => {
+                        console.log(output)
+                        const extract = zip.extract(`${modPack.mineCraftOpt.gameDir}.zip`, `${modPack.mineCraftOpt.gameDir}/..`)
+                        extract.on('end', () => {
+                            console.log('finished extracting')
+                        })
+
+                        extract.on('error', (error: any) => {
+                            console.error(error);
+                        });
+                    })
+            })
+            .catch(console.log)
     }
 }
