@@ -139,19 +139,14 @@ export default class FileController {
                     .on('error', err => {
                         console.log(err)
                     })
-                    .on('progress', percentage => {
-                        console.log(percentage * 100     + "%")
-                    })
-                    .on('end', output => {
-                        console.log(output)
-                        const extract = zip.extract(`${modPackConfig.mineCraftOpt.gameDir}.zip`, `${modPackConfig.mineCraftOpt.gameDir}/..`)
-                        extract.on('end', () => {
-                            console.log('finished extracting')
-                        })
-
-                        extract.on('error', (error: any) => {
-                            console.error(error);
-                        });
+                    .on('end', () => {
+                        zip.extract(`${modPackConfig.mineCraftOpt.gameDir}.zip`, `${modPackConfig.mineCraftOpt.gameDir}/..`)
+                            .on('end', () => {
+                                console.log('finished extracting')
+                            })
+                            .on('error', (error: any) => {
+                                console.error(error);
+                            });
                     })
             })
             .catch(console.log)
