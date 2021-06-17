@@ -2,6 +2,7 @@ import * as os from "os";
 import Path from "../uitl/Path";
 import * as fs from "fs";
 import * as wget from 'wget-improved'
+const fsExtra = require('fs-extra')
 const zip = require('onezip')
 
 export default class FileController {
@@ -28,13 +29,13 @@ export default class FileController {
                                     id: "summer2021",
                                     name: 'Summer 2021',
                                     logo: 'img/summer2021.jpg',
-                                    installUrl: "https://github.com/QuirinEcker/summer2021/releases/download/1.0/summer2021.zip",
+                                    installUrl: "https://github.com/QuirinEcker/summer2021/releases/download/1.2/summer2021.zip",
                                     mineCraftOpt: {
                                         created: "1970-01-01T00:00:00.000Z",
                                         gameDir: this.installPath.relativeToPath('instances/summer2021'),
                                         icon: "Furnace",
                                         javaArgs: "-Xmx8G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M",
-                                        lastVersionId: "forge",
+                                        lastVersionId: "1.12.2-forge-14.23.5.2855",
                                         name: "summer2021",
                                         type: "custom"
                                     }
@@ -152,14 +153,21 @@ export default class FileController {
                     .on('error', err => {
                         console.log(err)
                     })
+                    .on('progress', percentage => {
+                        console.log(percentage * 100)
+                    })
                     .on('end', () => {
                         zip.extract(`${modPackConfig.mineCraftOpt.gameDir}.zip`, `${modPackConfig.mineCraftOpt.gameDir}/..`)
                             .on('end', () => {
                                 console.log('finished extracting')
+                                this.copyVersionIntoMinecraftHome(id)
                             })
                             .on('error', (error: any) => {
                                 console.error(error);
-                            });
+                            })
+                            .on('progress', (percentage:any) => {
+                                console.log(percentage * 100)
+                            })
                     })
             })
             .catch(console.log)
@@ -182,5 +190,27 @@ export default class FileController {
             })
             .catch(console.log)
 
+    }
+
+    copyVersionIntoMinecraftHome(modPackId: string) {
+
+        this.getModPackConfigurationById(modPackId)
+            .then((config: any) => {
+                const versionPath = `versions/${config.mineCraftOpt.lastVersionId}`
+
+                fsExtra.copy(
+                    this.installPath.relativeToPath(`instances/${modPackId}/${versionPath}`),
+                    this.minecraftHomePath.relativeToPath(`${versionPath}`),
+                    (err: any) => {
+                        if (err) {
+                            console.log(err)
+                        } else {
+                            console.log("copied version")
+                        }
+                    }
+                )
+
+            })
+            .catch(console.log)
     }
 }

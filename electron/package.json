@@ -12,6 +12,7 @@
     "typescript": "^4.3.2"
   },
   "dependencies": {
+    "fs-extra": "^10.0.0",
     "onezip": "^5.0.0",
     "wget-improved": "^3.2.1"
   }

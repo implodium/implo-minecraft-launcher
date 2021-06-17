@@ -5,7 +5,7 @@
   </div>
 
   <div id="navigation">
-    <div *ngIf="installed" id="play-button" class="button">Play</div>
+    <div *ngIf="installed" id="play-button" (click)="installMinecraftModPack()" class="button">Play</div>
     <div *ngIf="!installed" id="install-button" (click)="installMinecraftModPack()" class="button">Install</div>
   </div>
 </div>

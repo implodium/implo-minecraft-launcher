@@ -32,7 +32,7 @@ export default class App {
                 .catch(err => reject(err));
         })
 
-        this.registerFunction('getLastModPack', (event, resolve, reject) => {
+        this.registerFunction('getLastModPack', (event, resolve, reject) => {66
             this.fileController.getLastModPack()
                 .then(resolve)
                 .catch(reject)
@@ -47,6 +47,7 @@ export default class App {
         this.registerFunction('installMinecraftModPack', (event, resolve, reject, args) => {
             this.fileController.installMinecraftModPack(args)
             this.fileController.writeConfigurationIntoMinecraftLauncher(args)
+            this.fileController.copyVersionIntoMinecraftHome(args)
         })
     }
 
