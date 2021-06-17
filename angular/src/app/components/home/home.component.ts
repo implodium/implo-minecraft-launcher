@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
   modPackId: string = "";
   InstallationState = InstallationState
   installationState = InstallationState.notInstalled
-  percentage: number = -1
+  percentage: number = 0
 
   constructor(private app: AppService) { }
 
@@ -29,6 +29,10 @@ export class HomeComponent implements OnInit {
           this.installationState = InstallationState.installed
         }
       }, modPackConfig.id)
+
+      this.app.on('installationPercentage', percentage => {
+        this.percentage = percentage;
+      })
     })
   }
 
@@ -39,7 +43,9 @@ export class HomeComponent implements OnInit {
   installMinecraftModPack() {
     this.installationState = InstallationState.installing
     this.app.request('installMinecraftModPack', () => {
-      this.installationState = InstallationState.installed
+      setTimeout(() => {
+        this.installationState = InstallationState.installed
+      }, 1000)
     }, this.modPackId)
   }
 }

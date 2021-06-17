@@ -2,7 +2,7 @@ import * as os from "os";
 import Path from "../uitl/Path";
 import * as fs from "fs";
 import * as wget from 'wget-improved'
-import App from "../App";
+import {IpcMainEvent} from 'electron'
 const fsExtra = require('fs-extra')
 const zip = require('onezip')
 
@@ -149,7 +149,7 @@ export default class FileController {
 
     }
 
-    installMinecraftModPack(id: string) {
+    installMinecraftModPack(id: string, event: IpcMainEvent) {
         return new Promise<void>((resolve, reject) => {
             this.getModPackConfigurationById(id)
                 .then(modPackConfig => {
@@ -158,18 +158,26 @@ export default class FileController {
                             reject(err)
                         })
                         .on('progress', percentage => {
-                            console.log(percentage * 100)
+                            this.sendInstallPercentage(
+                                Math.round(this.installPercentage + percentage * 100 * 0.48),
+                                event
+                            );
                         })
                         .on('end', () => {
+                            this.addInstallPercentage(48, event)
                             zip.extract(`${modPackConfig.mineCraftOpt.gameDir}.zip`, `${modPackConfig.mineCraftOpt.gameDir}/..`)
                                 .on('end', () => {
+                                    this.addInstallPercentage(48, event)
                                     resolve()
                                 })
                                 .on('error', (error: any) => {
                                     reject(error)
                                 })
                                 .on('progress', (percentage:any) => {
-                                    console.log(percentage * 100)
+                                    this.sendInstallPercentage(
+                                        this.installPercentage + Math.round(percentage * 0.48),
+                                        event
+                                    );
                                 })
                         })
                 })
@@ -177,7 +185,7 @@ export default class FileController {
         })
     }
 
-    writeConfigurationIntoMinecraftLauncher(modPackId: string): Promise<void> {
+    writeConfigurationIntoMinecraftLauncher(modPackId: string, event: IpcMainEvent): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.getModPackConfigurationById(modPackId)
                 .then(modPackConfig => {
@@ -194,7 +202,10 @@ export default class FileController {
                                 if (err) {
                                     reject(err)
                                 } else {
-                                    console.log("wrote config into minecraft launcher config")
+                                    this.addInstallPercentage(
+                                        2, event
+                                    );
+
                                     resolve();
                                 }
                             })
@@ -206,7 +217,7 @@ export default class FileController {
         })
     }
 
-    copyFilesIntoMinecraftHome(modPackId: string): Promise<void> {
+    copyFilesIntoMinecraftHome(modPackId: string, event: IpcMainEvent): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.getModPackConfigurationById(modPackId)
                 .then((config: any) => {
@@ -217,7 +228,13 @@ export default class FileController {
                     finished.push(this.copyVersionLibrariesIntoMinecraftHome(modPackId, config, versionPath))
 
                     Promise.all(finished)
-                        .then(() => resolve())
+                        .then(() => {
+                            resolve()
+
+                            this.addInstallPercentage(
+                                2, event
+                            );
+                        })
                         .catch(reject)
                 })
                 .catch(reject)
@@ -239,7 +256,6 @@ export default class FileController {
                         copyReject(err)
                     } else {
                         copyResolve()
-                        console.log("copied library")
                     }
                 }
             )
@@ -255,7 +271,6 @@ export default class FileController {
                     if (err) {
                         copyReject(err)
                     } else {
-                        console.log("copied version")
                         copyResolve(err)
                     }
                 }
@@ -263,8 +278,12 @@ export default class FileController {
         })
     }
 
-    addInstallPercentage(percentage: number) {
+    addInstallPercentage(percentage: number, event: IpcMainEvent) {
         this.installPercentage += percentage
-        App.app.send('installPercentage', percentage)
+        event.sender.send('installationPercentage', this.installPercentage.toString())
+    }
+
+    sendInstallPercentage(percentage: number, event: IpcMainEvent) {
+        event.sender.send('installationPercentage', percentage)
     }
 }

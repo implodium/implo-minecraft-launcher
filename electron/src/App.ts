@@ -1,5 +1,5 @@
 import ElectronController from "./control/ElectronController";
-import {app, ipcMain, ipcRenderer, IpcMainEvent} from "electron";
+import {app, ipcMain, IpcMainEvent} from "electron";
 import FileController from "./control/FileController";
 
 export default class App {
@@ -47,10 +47,10 @@ export default class App {
         this.registerFunction('installMinecraftModPack', (event, resolve, reject, args) => {
             const finished: Array<Promise<any>> = []
 
-            this.fileController.installMinecraftModPack(args)
+            this.fileController.installMinecraftModPack(args, event)
                 .then(() => {
-                    finished.push(this.fileController.writeConfigurationIntoMinecraftLauncher(args))
-                    finished.push(this.fileController.copyFilesIntoMinecraftHome(args))
+                    finished.push(this.fileController.writeConfigurationIntoMinecraftLauncher(args, event))
+                    finished.push(this.fileController.copyFilesIntoMinecraftHome(args, event))
 
                     Promise.all(finished)
                         .then(resolve)
@@ -76,9 +76,5 @@ export default class App {
                 .then(value => event.sender.send(name, value))
                 .catch(console.log)
         })
-    }
-
-    send(channel: string, ...args: any[]) {
-        ipcRenderer.send(channel, args)
     }
 }
