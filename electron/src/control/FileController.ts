@@ -20,7 +20,7 @@ export default class FileController {
 
     private readonly mineCraftLauncherPaths = {
         mac: new Path('/Applications/Minecraft.app'),
-        win: new Path('C:\\Program Files (x86)\\Minecraft Launcher\\MinecraftLauncher.exe')
+        win: new Path('C:\\Program Files (x86)\\Minecraft Launcher\\')
     }
 
     private installPercentage: number = 0
@@ -295,6 +295,7 @@ export default class FileController {
 
     openMinecraftLauncher(): Promise<void> {
         return new Promise(resolve => {
+            console.log(this.startCommand)
             child_process.exec(this.startCommand)
             resolve()
         })
@@ -304,7 +305,7 @@ export default class FileController {
         if (process.platform === 'darwin') {
             return `open ${this.mineCraftLauncherPaths.mac}`
         } else if (process.platform === 'win32') {
-            return `${this.mineCraftLauncherPaths.win}`
+            return `cd ${this.mineCraftLauncherPaths.win} && MinecraftLauncher.exe`
         } else {
             return 'OS not supported'
         }
