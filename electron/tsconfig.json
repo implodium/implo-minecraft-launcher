@@ -1,0 +1,21 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "../dist/electron/src",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "baseUrl": "../application",
+    "target": "es2017",
+    "paths": {
+      "*": [
+        "../node_modules/*"
+      ]
+    },
+    "lib": [
+      "es2018",
+      "dom"
+    ]
+  }
+}

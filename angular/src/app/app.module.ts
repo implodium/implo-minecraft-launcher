@@ -10,6 +10,7 @@ import { SetupComponent } from './components/setup/setup.component';
 import { MainComponent } from './components/main/main.component';
 import {NgxElectronModule} from "ngx-electron";
 import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { LoadingScreenComponent } from './components/loading-screen/loading-scre
     LoginComponent,
     SetupComponent,
     MainComponent,
-    LoadingScreenComponent
+    LoadingScreenComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
