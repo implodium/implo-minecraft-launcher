@@ -58,6 +58,12 @@ export default class App {
                 })
                 .catch(console.log)
         })
+
+        this.registerFunction('startMinecraftModPack', (event, resolve, reject) => {
+            this.fileController.openMinecraftLauncher()
+                .then(resolve)
+                .catch(reject)
+        })
     }
 
     registerFunction(

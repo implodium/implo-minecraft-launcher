@@ -48,4 +48,10 @@ export class HomeComponent implements OnInit {
       }, 1000)
     }, this.modPackId)
   }
+
+  startMinecraftModPack() {
+    this.app.request('startMinecraftModPack', () => {
+      this.app.request("quit", () => { })
+    })
+  }
 }
