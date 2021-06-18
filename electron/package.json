@@ -2,11 +2,11 @@
   "name": "implo-launcher-electron",
   "version": "1.0.0",
   "scripts": {
-    "build": "tsc && cp -r node_modules ../dist/electron",
-    "dev": "npm run build && electron ..",
+    "build": "tsc && cp -r node_modules ../dist/electron && cp ../package.json ../dist/",
+    "dev": "npm run build && electron ../dist",
     "clean": "cd .. && rm -rf release",
-    "package:mac": "npm run clean && npm run build && electron-packager .. --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=../release",
-    "package:win": "npm run clean && npm run build && electron-packager .. --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=../release"
+    "package:mac": "npm run clean && npm run build && electron-packager ../dist --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=../release",
+    "package:win": "npm run clean && npm run build && electron-packager ../dist --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=../release"
   },
   "devDependencies": {
     "typescript": "^4.3.2"
