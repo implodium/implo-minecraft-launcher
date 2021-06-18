@@ -3,6 +3,7 @@ import Path from "../uitl/Path";
 import * as fs from "fs";
 import * as wget from 'wget-improved'
 import {IpcMainEvent} from 'electron'
+import * as child_process from 'child_process'
 const fsExtra = require('fs-extra')
 const zip = require('onezip')
 
@@ -15,6 +16,11 @@ export default class FileController {
     private readonly mineCraftHomePaths = {
         mac: new Path(`/Users/${os.userInfo().username}/Library/ApplicationSupport/minecraft/`),
         win: new Path(`C:\\Users\\${os.userInfo().username}\\AppData\\Roaming\\.minecraft\\`)
+    }
+
+    private readonly mineCraftLauncherPaths = {
+        mac: new Path('/Applications/Minecraft.app'),
+        win: new Path('C:\\Program Files (x86)\\Minecraft Launcher\\')
     }
 
     private installPercentage: number = 0
@@ -285,5 +291,23 @@ export default class FileController {
 
     sendInstallPercentage(percentage: number, event: IpcMainEvent) {
         event.sender.send('installationPercentage', percentage)
+    }
+
+    openMinecraftLauncher(): Promise<void> {
+        return new Promise(resolve => {
+            console.log(this.startCommand)
+            child_process.exec(this.startCommand)
+            resolve()
+        })
+    }
+
+    get startCommand(): string {
+        if (process.platform === 'darwin') {
+            return `open ${this.mineCraftLauncherPaths.mac}`
+        } else if (process.platform === 'win32') {
+            return `cd ${this.mineCraftLauncherPaths.win} && MinecraftLauncher.exe`
+        } else {
+            return 'OS not supported'
+        }
     }
 }
