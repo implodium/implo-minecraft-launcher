@@ -4,6 +4,7 @@ import * as fs from "fs";
 import * as wget from 'wget-improved'
 import {IpcMainEvent} from 'electron'
 import * as child_process from 'child_process'
+import InstallationStatus from "../uitl/InstallationStatus";
 const fsExtra = require('fs-extra')
 const zip = require('onezip')
 
@@ -286,11 +287,19 @@ export default class FileController {
 
     addInstallPercentage(percentage: number, event: IpcMainEvent) {
         this.installPercentage += percentage
-        event.sender.send('installationPercentage', this.installPercentage.toString())
+
+        this.sendInstallPercentage(percentage, event)
     }
 
     sendInstallPercentage(percentage: number, event: IpcMainEvent) {
-        event.sender.send('installationPercentage', percentage)
+
+        const installationStatus: InstallationStatus = {
+            percentage:  percentage,
+            installationStep: 'installing',
+            finished: false
+        }
+
+        event.sender.send('installationStatus', JSON.stringify(installationStatus))
     }
 
     openMinecraftLauncher(): Promise<void> {

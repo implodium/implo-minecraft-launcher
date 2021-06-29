@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AppService} from "../services/app.service";
-import InstallationState from "../../util/InstallationState";
+import InstanceState from "../../util/InstanceState";
+import InstallationStatus from "../../util/InstallationStatus";
 
 @Component({
   selector: 'app-home',
@@ -12,8 +13,9 @@ export class HomeComponent implements OnInit {
   logoSrc: string = "";
   imageFound: boolean = true
   modPackId: string = "";
-  InstallationState = InstallationState
-  installationState = InstallationState.notInstalled
+  InstanceState = InstanceState
+  instanceState = InstanceState.notInstalled
+  installStatus?: InstallationStatus
   percentage: number = 0
 
   constructor(private app: AppService) { }
@@ -26,12 +28,14 @@ export class HomeComponent implements OnInit {
 
       this.app.request('checkModPackInstallation', isInstalled => {
         if(isInstalled) {
-          this.installationState = InstallationState.installed
+          this.instanceState = InstanceState.installed
         }
       }, modPackConfig.id)
 
-      this.app.on('installationPercentage', percentage => {
-        this.percentage = percentage;
+      this.app.on('installationStatus', installationState => {
+        const installationStateObject: InstallationStatus = JSON.parse(installationState)
+        this.percentage = installationStateObject.percentage
+        this.installStatus = installationStateObject
       })
     })
   }
@@ -41,10 +45,10 @@ export class HomeComponent implements OnInit {
   }
 
   installMinecraftModPack() {
-    this.installationState = InstallationState.installing
+    this.instanceState = InstanceState.installing
     this.app.request('installMinecraftModPack', () => {
       setTimeout(() => {
-        this.installationState = InstallationState.installed
+        this.instanceState = InstanceState.installed
       }, 1000)
     }, this.modPackId)
   }
