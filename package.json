@@ -9,10 +9,11 @@
   "scripts": {
     "init": "npm run angular:watch",
     "start": "npm run electron:dev",
+    "clean": "rm -rf release && rm -rf dist",
     "angular:watch": "(cd angular && npm run watch)",
     "electron:dev": "(cd electron && npm run dev)",
-    "package:mac": "(cd angular && npm run build) && (cd electron && npm run package:mac)",
-    "package:win": "(cd angular && npm run build && cd ..) && (cd electron && npm run package:win && cd ..)"
+    "package:mac": "npm run clean && (cd angular && npm run build) && (cd electron && npm run package:mac)",
+    "package:win": "npm run clean && (cd angular && npm run build && cd ..) && (cd electron && npm run package:win && cd ..)"
   },
   "devDependencies": {
     "electron": "^13.1.2",
