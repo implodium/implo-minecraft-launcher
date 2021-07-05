@@ -1,7 +1,9 @@
 import {app, BrowserWindow} from "electron";
 import * as url from "url";
 import * as path from "path";
+import {injectable} from "inversify";
 
+@injectable()
 export default class ElectronController {
 
     private _window: BrowserWindow;

@@ -8,6 +8,10 @@
     "sourceMap": true,
     "baseUrl": "../application",
     "target": "es2017",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "types": ["reflect-metadata"],
     "paths": {
       "*": [
         "../node_modules/*"

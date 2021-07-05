@@ -1,11 +1,16 @@
 import ElectronController from "./control/ElectronController";
 import {app, ipcMain, IpcMainEvent} from "electron";
 import FileController from "./control/FileController";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export default class App {
-    static readonly app: App = new App();
-    readonly electronController: ElectronController = new ElectronController();
-    readonly fileController: FileController = new FileController();
+    public static app: App
+
+    constructor(
+        @inject(ElectronController) public electronController: ElectronController,
+        @inject(FileController) public fileController: FileController
+    ) {}
 
     init() {
         this.electronController.createWindow();
@@ -32,7 +37,7 @@ export default class App {
                 .catch(err => reject(err));
         })
 
-        this.registerFunction('getLastModPack', (event, resolve, reject) => {66
+        this.registerFunction('getLastModPack', (event, resolve, reject) => {
             this.fileController.getLastModPack()
                 .then(resolve)
                 .catch(reject)

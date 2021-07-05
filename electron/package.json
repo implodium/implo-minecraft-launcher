@@ -14,7 +14,10 @@
   },
   "dependencies": {
     "fs-extra": "^10.0.0",
+    "inversify": "^5.1.1",
     "onezip": "^5.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.1.0",
     "wget-improved": "^3.2.1"
   }
 }

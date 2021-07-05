@@ -5,9 +5,11 @@ import * as wget from 'wget-improved'
 import {IpcMainEvent} from 'electron'
 import * as child_process from 'child_process'
 import InstallationStatus from "../uitl/InstallationStatus";
+import {injectable} from "inversify";
 const fsExtra = require('fs-extra')
 const zip = require('onezip')
 
+@injectable()
 export default class FileController {
     private readonly installationPaths = {
         mac: new Path(`/Users/${os.userInfo().username}/Library/ApplicationSupport/.implo-launcher/`),
