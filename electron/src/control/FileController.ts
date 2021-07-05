@@ -321,4 +321,16 @@ export default class FileController {
             return 'OS not supported'
         }
     }
+
+    folderExists(path: string): Promise<boolean> {
+        return new Promise((resolve) => {
+            fs.access(path, (err: any) => {
+                if (!err) {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                }
+            })
+        })
+    }
 }

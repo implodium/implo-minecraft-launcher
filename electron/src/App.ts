@@ -2,6 +2,7 @@ import ElectronController from "./control/ElectronController";
 import {app, ipcMain, IpcMainEvent} from "electron";
 import FileController from "./control/FileController";
 import {inject, injectable} from "inversify";
+import SetupController from "./control/SetupController";
 
 @injectable()
 export default class App {
@@ -9,7 +10,8 @@ export default class App {
 
     constructor(
         @inject(ElectronController) public electronController: ElectronController,
-        @inject(FileController) public fileController: FileController
+        @inject(FileController) public fileController: FileController,
+        @inject(SetupController) private setupController: SetupController
     ) {}
 
     init() {
@@ -18,8 +20,8 @@ export default class App {
         app.on('window-all-closed', app.quit)
 
         this.registerFunction('checkInstallation', (event, resolve) => {
-            this.fileController.checkInstallation()
-                .then(isInstalled => resolve(isInstalled))
+            this.setupController.isBaseInstalled()
+                .then(resolve)
                 .catch(console.log)
         })
 
@@ -28,13 +30,13 @@ export default class App {
         })
 
         this.registerFunction('getPath', (event, resolve) => {
-            resolve(this.fileController.installPath.toString())
+            resolve(this.setupController.basePath)
         })
 
         this.registerFunction('installBase', (event, resolve, reject) => {
-            this.fileController.installBase()
-                .then(() => resolve(null))
-                .catch(err => reject(err));
+            this.setupController.installBase()
+                .then(resolve)
+                .catch(reject)
         })
 
         this.registerFunction('getLastModPack', (event, resolve, reject) => {
