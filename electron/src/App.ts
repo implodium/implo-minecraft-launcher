@@ -3,6 +3,7 @@ import {app, ipcMain, IpcMainEvent} from "electron";
 import FileController from "./control/FileController";
 import {inject, injectable} from "inversify";
 import SetupController from "./control/SetupController";
+import ModPackController from "./control/ModPackController";
 
 @injectable()
 export default class App {
@@ -11,7 +12,8 @@ export default class App {
     constructor(
         @inject(ElectronController) public electronController: ElectronController,
         @inject(FileController) public fileController: FileController,
-        @inject(SetupController) private setupController: SetupController
+        @inject(SetupController) private setupController: SetupController,
+        @inject(ModPackController) private modPackController: ModPackController
     ) {}
 
     init() {
@@ -40,7 +42,7 @@ export default class App {
         })
 
         this.registerFunction('getLastModPack', (event, resolve, reject) => {
-            this.fileController.getLastModPack()
+            this.modPackController.lastModPack
                 .then(resolve)
                 .catch(reject)
         })

@@ -1,13 +1,15 @@
 import {inject, injectable} from "inversify";
 import FileController from "./FileController";
 import {PathController} from "./PathController";
+import {ConfigurationController} from "./ConfigurationController";
 
 @injectable()
 export default class SetupController {
 
     constructor(
         @inject(FileController) public fileController: FileController,
-        @inject(PathController) public pathController: PathController
+        @inject(PathController) public pathController: PathController,
+        @inject(ConfigurationController) public configController: ConfigurationController
     ) {
     }
 
@@ -25,7 +27,8 @@ export default class SetupController {
 
     installBase(): Promise<void> {
         return new Promise((resolve, reject) => {
-            return this.fileController.installBase()
+            return this.fileController
+                .installBase(this.configController.defaultConfiguration)
                 .then(() => resolve(null))
                 .catch(reject)
         })
