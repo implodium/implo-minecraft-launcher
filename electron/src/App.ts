@@ -48,7 +48,7 @@ export default class App {
         })
 
         this.registerFunction('checkModPackInstallation', (event, resolve, reject, args) => {
-            this.fileController.checkModPackInstallation(args)
+            this.modPackController.isInstalled(args)
                 .then(resolve)
                 .catch(console.log)
         })
