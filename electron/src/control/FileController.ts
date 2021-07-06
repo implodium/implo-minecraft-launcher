@@ -7,6 +7,7 @@ import * as child_process from 'child_process'
 import InstallationStatus from "../uitl/InstallationStatus";
 import {injectable} from "inversify";
 import LauncherConfiguration from "../uitl/LauncherConfiguration";
+import {Observable} from "rxjs";
 const fsExtra = require('fs-extra')
 const zip = require('onezip')
 
@@ -278,6 +279,7 @@ export default class FileController {
     sendInstallPercentage(percentage: number, event: IpcMainEvent) {
 
         const installationStatus: InstallationStatus = {
+            stepPercentage: 0,
             percentage:  percentage,
             installationStep: 'installing',
             finished: false
@@ -313,6 +315,21 @@ export default class FileController {
                     resolve(false)
                 }
             })
+        })
+    }
+
+    download(url: string, to: string): Observable<number> {
+        return new Observable<number>(subscriber => {
+            wget.download(url, to)
+                .on('progress', percentage => {
+                    subscriber.next(Math.round(percentage * 100))
+                })
+                .on('end', () => {
+                    subscriber.next(-1)
+                })
+                .on('error', err => {
+                    subscriber.error(err)
+                })
         })
     }
 }

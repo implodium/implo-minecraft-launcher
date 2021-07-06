@@ -1,5 +1,6 @@
 export default interface InstallationStatus {
-  installationStep: string,
+  installationStep: string
+  stepPercentage: number
   percentage: number
   finished: boolean
 }

@@ -3,6 +3,7 @@ import * as fs from "fs";
 import {inject, injectable} from "inversify";
 import FileController from "./FileController";
 import {PathController} from "./PathController";
+import {ModPackConfiguration} from "../uitl/ModPackConfiguration";
 
 @injectable()
 export class ConfigurationController {
@@ -60,6 +61,23 @@ export class ConfigurationController {
 
             return this.loadedConfiguration
         }
+    }
+
+    getmodPackConfigBy(id: string): Promise<ModPackConfiguration> {
+        return new Promise((resolve, reject) => {
+            this.configuration
+                .then(config => {
+                    const modPackConfig = config.modPacks.filter(modPack => {
+                        return modPack.id = id
+                    })[0]
+
+                    if (modPackConfig) {
+                        resolve(modPackConfig)
+                    } else {
+                        reject('modPack not found')
+                    }
+                })
+        })
     }
 
 }

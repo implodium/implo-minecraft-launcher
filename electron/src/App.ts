@@ -54,18 +54,10 @@ export default class App {
         })
 
         this.registerFunction('installMinecraftModPack', (event, resolve, reject, args) => {
-            const finished: Array<Promise<any>> = []
-
-            this.fileController.installMinecraftModPack(args, event)
-                .then(() => {
-                    finished.push(this.fileController.writeConfigurationIntoMinecraftLauncher(args, event))
-                    finished.push(this.fileController.copyFilesIntoMinecraftHome(args, event))
-
-                    Promise.all(finished)
-                        .then(resolve)
-                        .catch(reject)
+            this.modPackController.install(args)
+                .subscribe(status => {
+                    console.log(status)
                 })
-                .catch(console.log)
         })
 
         this.registerFunction('startMinecraftModPack', (event, resolve, reject) => {
