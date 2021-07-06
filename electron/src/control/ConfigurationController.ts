@@ -4,11 +4,14 @@ import {inject, injectable} from "inversify";
 import FileController from "./FileController";
 import {PathController} from "./PathController";
 import {ModPackConfiguration} from "../uitl/ModPackConfiguration";
+import MinecraftLauncherProfiles from "../uitl/MinecraftLauncherProfiles";
 
 @injectable()
 export class ConfigurationController {
 
     private loadedConfiguration?: Promise<any>
+    private loadedMinecraftLauncherConfiguration?: Promise<any>
+
     public defaultConfiguration: LauncherConfiguration = {
         modPacks: [
             {
@@ -26,7 +29,8 @@ export class ConfigurationController {
                     javaArgs: "-Xmx8G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M",
                     lastVersionId: "1.12.2-forge-14.23.5.2855",
                     name: "summer2021",
-                    type: "custom"
+                    type: "custom",
+                    lastUsed: ""
                 }
             }
         ],
@@ -46,8 +50,10 @@ export class ConfigurationController {
         if (this.loadedConfiguration) {
             return this.loadedConfiguration
         } else {
-            const configurationPath = this.fileController
-                .installPath.relativeToPath("launcher-config.json")
+            const configurationPath = this.pathController
+                .installPath
+                .path
+                .relativeToPath("launcher-config.json")
 
             this.loadedConfiguration = new Promise((resolve, reject) => {
                 fs.readFile(configurationPath, 'utf8', (err: Error, data: any) => {
@@ -61,6 +67,51 @@ export class ConfigurationController {
 
             return this.loadedConfiguration
         }
+    }
+
+    get minecraftLauncherConfiguration(): Promise<MinecraftLauncherProfiles> {
+        if (this.loadedMinecraftLauncherConfiguration) {
+            return this.loadedMinecraftLauncherConfiguration
+        } else {
+            const homeConfigurationPath = this.pathController
+                .minecraftHomePath
+                .path
+                .relativeToPath("launcher_profiles.json")
+
+            this.loadedMinecraftLauncherConfiguration = new Promise((resolve, reject) => {
+                fs.readFile(homeConfigurationPath, 'utf8', (err, data) => {
+                    if (err) {
+                        reject(err)
+                    } else {
+                        resolve(JSON.parse(data))
+                    }
+                })
+            })
+
+            return this.loadedMinecraftLauncherConfiguration
+        }
+    }
+
+    writeMinecraftLauncherConfiguration(config: MinecraftLauncherProfiles): Promise<void> {
+        this.loadedMinecraftLauncherConfiguration = new Promise(resolve => {
+            resolve(config)
+        })
+
+        return new Promise((resolve, reject) => {
+            const configPath = this.pathController
+                .minecraftHomePath
+                .path
+                .relativeToPath("launcher_profiles.json")
+
+            fs.writeFile(configPath, JSON.stringify(config), err => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve();
+                }
+            })
+        })
+
     }
 
     getmodPackConfigBy(id: string): Promise<ModPackConfiguration> {

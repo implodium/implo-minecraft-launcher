@@ -6,6 +6,7 @@ import {PathController} from "./PathController";
 import Installation from "../uitl/Installation";
 import {Observable} from "rxjs";
 import InstallationStatus from "../uitl/InstallationStatus";
+import MinecraftLauncherProfiles from "../uitl/MinecraftLauncherProfiles";
 
 @injectable()
 export default class ModPackController {
@@ -25,7 +26,8 @@ export default class ModPackController {
         this.initiateConfig(installation)
             .then(installation => this.download(installation))
             .then(installation => this.extract(installation))
-            .then(installation => this.copyFiles(installation))
+            .then(installation => this.copying(installation))
+            .then(installation => this.finish(installation))
             .catch(console.log)
 
         return installation.stream
@@ -116,9 +118,44 @@ export default class ModPackController {
         })
     }
 
-    private copyFiles(installation: Installation): Promise<Installation> {
+    private copying(installation: Installation): Promise<Installation> {
         return new Promise((resolve, reject) => {
-            console.log("copying files")
+            installation.getConfiguration()
+                .then(config => {
+                    installation.installationStep = 'copying'
+                    const finish: Array<Promise<void>> = []
+
+                    finish.push(this.writeConfiguration(config))
+
+                    Promise.all(finish)
+                        .then(() => {
+                            installation.stepPercentage = 100
+                            resolve(installation)
+                        })
+                        .catch(reject)
+                })
         })
     }
+
+    private writeConfiguration(config: ModPackConfiguration): Promise<void> {
+        return this.configController.minecraftLauncherConfiguration
+                .then(mcConfig => ModPackController.insertDefaultConfig(mcConfig, config))
+                .then(mcConfig => {
+                    return this.configController
+                        .writeMinecraftLauncherConfiguration(mcConfig)
+                })
+    }
+
+    private static insertDefaultConfig(mcConfig: MinecraftLauncherProfiles, config: ModPackConfiguration): MinecraftLauncherProfiles {
+        mcConfig.profiles[config.id] = config.mineCraftOpt
+        return mcConfig;
+    }
+
+    private finish(installation: Installation): Promise<Installation> {
+        return new Promise((resolve) => {
+            installation.finish()
+            resolve(installation)
+        })
+    }
+
 }

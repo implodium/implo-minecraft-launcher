@@ -10,4 +10,8 @@ export class PathController {
         `/Users/${os.userInfo().username}/Library/ApplicationSupport/.implo-launcher/`
     )
 
+    public readonly minecraftHomePath = new UniversalPath(
+        `C:\\Users\\${os.userInfo().username}\\AppData\\Roaming\\.minecraft\\`,
+        `/Users/${os.userInfo().username}/Library/ApplicationSupport/minecraft/`
+    )
 }
