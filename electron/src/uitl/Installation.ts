@@ -37,7 +37,7 @@ export default class Installation {
     }
 
     set stepPercentage(percentage: number) {
-        this.status.percentage = percentage
+        this.status.stepPercentage = percentage
         this.notify()
     }
 

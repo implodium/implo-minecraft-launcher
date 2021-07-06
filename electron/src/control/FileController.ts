@@ -332,4 +332,19 @@ export default class FileController {
                 })
         })
     }
+
+    extract(file: string, to: string): Observable<number> {
+        return new Observable<number>(subscriber => {
+            zip.extract(file, to)
+                .on('end', () => {
+                    subscriber.complete()
+                })
+                .on('error', (error: any) => {
+                    subscriber.error(error)
+                })
+                .on('progress', (percentage:any) => {
+                    subscriber.next(percentage)
+                })
+        })
+    }
 }

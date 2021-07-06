@@ -83,7 +83,19 @@ export default class ModPackController {
         return new Promise((resolve, reject) => {
             installation.getConfiguration()
                 .then(config => {
-                    console.log("extracting")
+                    this.fileController.extract(
+                        `${config.mineCraftOpt.gameDir}.zip`,
+                        config.mineCraftOpt.gameDir
+                    ).subscribe({
+                        error(error) { reject(error) },
+                        next(percentage) {
+                            installation.percentage = Math.round(percentage * 0.48)
+                        },
+                        complete() {
+                            installation.stepPercentage = 96
+                            resolve(installation)
+                        },
+                    })
                 })
                 .catch(reject)
         })
@@ -91,7 +103,7 @@ export default class ModPackController {
 
     private copyFiles(installation: Installation): Promise<Installation> {
         return new Promise((resolve, reject) => {
-
+            console.log("copying files")
         })
     }
 
