@@ -325,7 +325,7 @@ export default class FileController {
                     subscriber.next(Math.round(percentage * 100))
                 })
                 .on('end', () => {
-                    subscriber.next(-1)
+                    subscriber.complete()
                 })
                 .on('error', err => {
                     subscriber.error(err)

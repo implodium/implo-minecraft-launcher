@@ -78,12 +78,14 @@ export default class ModPackController {
                     this.fileController.download(
                         config.installUrl,
                         `${config.mineCraftOpt.gameDir}.zip`
-                    ).subscribe(percentage => {
-                        if (percentage === -1) {
+                    ).subscribe({
+                        error(error) { reject(error) },
+                        next(percentage) {
+                            installation.percentage = Math.round(percentage * 0.48)
+                        },
+                        complete() {
                             installation.stepPercentage = 48
                             resolve(installation)
-                        } else {
-                            installation.percentage = Math.round(percentage * 0.48)
                         }
                     })
                 })
