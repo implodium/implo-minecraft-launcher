@@ -59,10 +59,22 @@ export default class ModPackController {
         })
     }
 
+    private initiateConfig(installation: Installation): Promise<Installation> {
+        return new Promise((resolve, reject) => {
+            this.configController.getmodPackConfigBy(installation.id)
+                .then(config => {
+                    installation.config = config
+                    resolve(installation)
+                })
+                .catch(reject)
+        })
+    }
+
     private download(installation: Installation): Promise<Installation> {
         return new Promise((resolve, reject) => {
             installation.getConfiguration()
                 .then(config => {
+                    installation.installationStep = 'downloading'
                     this.fileController.download(
                         config.installUrl,
                         `${config.mineCraftOpt.gameDir}.zip`
@@ -83,6 +95,7 @@ export default class ModPackController {
         return new Promise((resolve, reject) => {
             installation.getConfiguration()
                 .then(config => {
+                    installation.installationStep = 'extracting'
                     this.fileController.extract(
                         `${config.mineCraftOpt.gameDir}.zip`,
                         config.mineCraftOpt.gameDir
@@ -104,17 +117,6 @@ export default class ModPackController {
     private copyFiles(installation: Installation): Promise<Installation> {
         return new Promise((resolve, reject) => {
             console.log("copying files")
-        })
-    }
-
-    private initiateConfig(installation: Installation): Promise<Installation> {
-        return new Promise((resolve, reject) => {
-            this.configController.getmodPackConfigBy(installation.id)
-                .then(config => {
-                    installation.config = config
-                    resolve(installation)
-                })
-                .catch(reject)
         })
     }
 }
