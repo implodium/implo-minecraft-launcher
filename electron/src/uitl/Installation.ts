@@ -48,6 +48,9 @@ export default class Installation {
 
     finish() {
         this.status.finished = true;
+        this.percentage = 0
+        this.stepPercentage = 100
+        this.installationStep = 'finished'
         this.notify()
     }
 

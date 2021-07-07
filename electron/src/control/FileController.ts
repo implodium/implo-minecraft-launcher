@@ -270,6 +270,19 @@ export default class FileController {
         })
     }
 
+    copy(from: string, to: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            fsExtra.copy(from, to, (err: any) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve()
+                }
+            })
+        })
+
+    }
+
     addInstallPercentage(percentage: number, event: IpcMainEvent) {
         this.installPercentage += percentage
 

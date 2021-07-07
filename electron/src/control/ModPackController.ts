@@ -17,7 +17,8 @@ export default class ModPackController {
         @inject(FileController) private fileController: FileController,
         @inject(ConfigurationController) private configController: ConfigurationController,
         @inject(PathController) private pathController: PathController
-    ) { }
+    ) {
+    }
 
     install(id: string): Observable<InstallationStatus> {
         const installation = new Installation(id)
@@ -81,7 +82,9 @@ export default class ModPackController {
                         config.installUrl,
                         `${config.mineCraftOpt.gameDir}.zip`
                     ).subscribe({
-                        error(error) { reject(error) },
+                        error(error) {
+                            reject(error)
+                        },
                         next(percentage) {
                             installation.percentage = Math.round(percentage * 0.48)
                         },
@@ -102,9 +105,11 @@ export default class ModPackController {
                     installation.installationStep = 'extracting'
                     this.fileController.extract(
                         `${config.mineCraftOpt.gameDir}.zip`,
-                        config.mineCraftOpt.gameDir
+                        `${config.mineCraftOpt.gameDir}/..`
                     ).subscribe({
-                        error(error) { reject(error) },
+                        error(error) {
+                            reject(error)
+                        },
                         next(percentage) {
                             installation.percentage = Math.round(percentage * 0.48)
                         },
@@ -126,10 +131,13 @@ export default class ModPackController {
                     const finish: Array<Promise<void>> = []
 
                     finish.push(this.writeConfiguration(config))
+                    finish.push(this.copyVersions(config))
+                    finish.push(this.copyVersionLib(config))
 
                     Promise.all(finish)
                         .then(() => {
                             installation.stepPercentage = 100
+                            installation.percentage = 0
                             resolve(installation)
                         })
                         .catch(reject)
@@ -139,11 +147,11 @@ export default class ModPackController {
 
     private writeConfiguration(config: ModPackConfiguration): Promise<void> {
         return this.configController.minecraftLauncherConfiguration
-                .then(mcConfig => ModPackController.insertDefaultConfig(mcConfig, config))
-                .then(mcConfig => {
-                    return this.configController
-                        .writeMinecraftLauncherConfiguration(mcConfig)
-                })
+            .then(mcConfig => ModPackController.insertDefaultConfig(mcConfig, config))
+            .then(mcConfig => {
+                return this.configController
+                    .writeMinecraftLauncherConfiguration(mcConfig)
+            })
     }
 
     private static insertDefaultConfig(mcConfig: MinecraftLauncherProfiles, config: ModPackConfiguration): MinecraftLauncherProfiles {
@@ -158,4 +166,38 @@ export default class ModPackController {
         })
     }
 
+    private copyVersions(config: ModPackConfiguration): Promise<void> {
+        console.log("finished writign config now copying version files")
+        const from = this.pathController
+            .installPath
+            .path
+            .relativeToPath(
+                `instances/${config.id}/versions/${config.mineCraftOpt.lastVersionId}`
+            );
+
+        const to = this.pathController
+            .minecraftHomePath
+            .path
+            .relativeToPath(`versions/${config.mineCraftOpt.lastVersionId}`)
+
+        return this.fileController.copy(from, to)
+    }
+
+    private copyVersionLib(config: ModPackConfiguration): Promise<void> {
+        const versionNameFragments = config.mineCraftOpt.lastVersionId.split('-')
+        const libraryName = `${versionNameFragments[0]}-${versionNameFragments[2]}`
+        const libraryHomePath = `versions/${config.mineCraftOpt.lastVersionId}/lib/${libraryName}`
+
+        const from = this.pathController
+            .installPath
+            .path
+            .relativeToPath(`instances/${config.id}/${libraryHomePath}`)
+
+        const to = this.pathController
+            .minecraftHomePath
+            .path
+            .relativeToPath(`libraries/net/minecraftforge/forge/${libraryName}`)
+
+        return this.fileController.copy(from, to)
+    }
 }
