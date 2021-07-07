@@ -11,8 +11,6 @@ import MinecraftLauncherProfiles from "../uitl/MinecraftLauncherProfiles";
 @injectable()
 export default class ModPackController {
 
-    private installations: Array<Installation> = []
-
     constructor(
         @inject(FileController) private fileController: FileController,
         @inject(ConfigurationController) private configController: ConfigurationController,
@@ -22,7 +20,6 @@ export default class ModPackController {
 
     install(id: string): Observable<InstallationStatus> {
         const installation = new Installation(id)
-        this.installations.push(installation)
 
         this.initiateConfig(installation)
             .then(installation => this.download(installation))
