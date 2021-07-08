@@ -11,6 +11,9 @@ import { MainComponent } from './components/main/main.component';
 import {NgxElectronModule} from "ngx-electron";
 import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
 import { HomeComponent } from './components/home/home.component';
+import { InstallPromptComponent } from './components/install-prompt/install-prompt.component';
+import {MatIconModule} from "@angular/material/icon";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -19,13 +22,16 @@ import { HomeComponent } from './components/home/home.component';
     SetupComponent,
     MainComponent,
     LoadingScreenComponent,
-    HomeComponent
+    HomeComponent,
+    InstallPromptComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot(Routes),
-    NgxElectronModule
+    NgxElectronModule,
+    MatIconModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

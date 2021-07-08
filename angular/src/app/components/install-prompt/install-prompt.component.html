@@ -1,0 +1,75 @@
+<div id="prompt-container">
+  <div id="prompt">
+    <div id="prompt-top-nav">
+      <div id="prompt-top-left-nav-container">
+
+      </div>
+
+      <div id="prompt-top-right-nav-container">
+        <div class="nav-elem nav-elem-button">
+          <mat-icon>
+            close
+          </mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <div id="prompt-content">
+      <div [ngSwitch]="pageNo">
+        <div id="prompt-content-1" class="prompt-content" *ngSwitchCase="1">
+          <h1>Information</h1>
+          <p>
+            This installation will do the following:
+          </p>
+
+          <ul>
+            <li>Download the modpack from the internet</li>
+            <li>Extract the downloaded zip file</li>
+            <li>Copy the required Version into the home minecraft directory</li>
+            <li>
+              Modify the default minecraft config (this is required fo showing the modpack in the default minecraft
+              launche)
+            </li>
+          </ul>
+        </div>
+
+        <div id="prompt-content-2" class="prompt-content" *ngSwitchCase="2">
+          2
+        </div>
+
+        <div id="prompt-content-3" class="prompt-content" *ngSwitchCase="3">
+          3
+        </div>
+      </div>
+    </div>
+
+    <div id="prompt-bottom-nav">
+      <div id="prompt-bottom-left-nav-container">
+        <div class="nav-elem nav-elem-button" *ngIf="pageNo != 1">
+          <div class="button red-button" (click)="previous()" >previous</div>
+        </div>
+      </div>
+
+      <div id="prompt-bottom-right-nav-container">
+
+        <div *ngIf="pageNo < pageMax - 1">
+          <div class="nav-elem nav-elem-button">
+            <div class="button green-button" (click)="next()">next</div>
+          </div>
+        </div>
+
+        <div *ngIf="finished">
+          <div class="nav-elem nav-elem-button">
+            <div class="button green-button" (click)="finish()">finish</div>
+          </div>
+        </div>
+
+        <div *ngIf="pageNo === pageMax - 1">
+          <div class="nav-elem nav-elem-button">
+            <div class="button green-button" (click)="install()">install</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

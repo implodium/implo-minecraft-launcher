@@ -38,6 +38,10 @@ export class HomeComponent implements OnInit {
     return `assets/${this.logoSrc}`
   }
 
+  openInstallPrompt() {
+
+  }
+
   installMinecraftModPack() {
     this.instanceState = InstanceState.installing
     this.app.requestProcess('installMinecraftModPack', this.modPackId)
