@@ -12,10 +12,10 @@
       Play
     </div>
 
-    <div *ngIf="instanceState === InstanceState.installing"
+    <div *ngIf="instanceState === InstanceState.installing && installStatus"
          id="percentage-button"
          class="button">
-      {{percentage}} %
+      {{ installStatus.percentage }} %
     </div>
 
     <div *ngIf="instanceState === InstanceState.notInstalled"

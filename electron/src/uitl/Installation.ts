@@ -52,10 +52,15 @@ export default class Installation {
         this.stepPercentage = 100
         this.installationStep = 'finished'
         this.notify()
+        this.complete()
     }
 
     notify() {
         this._update.next(this.status)
+    }
+
+    complete() {
+        this._update.complete()
     }
 
     get stream(): Observable<InstallationStatus> {

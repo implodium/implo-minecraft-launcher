@@ -4,6 +4,7 @@ import FileController from "./control/FileController";
 import {inject, injectable} from "inversify";
 import SetupController from "./control/SetupController";
 import ModPackController from "./control/ModPackController";
+import {Observable, Subscriber} from "rxjs";
 
 @injectable()
 export default class App {
@@ -53,12 +54,13 @@ export default class App {
                 .catch(console.log)
         })
 
-        this.registerFunction('installMinecraftModPack', (event, resolve, reject, args) => {
-            this.modPackController.install(args)
-                .subscribe(status => {
-                    console.log(status)
-                })
-        })
+        this.registerFunctionProcess(
+            'installMinecraftModPack',
+            (subscriber, args) => {
+                this.modPackController.install(args)
+                    .subscribe(subscriber)
+            }
+        )
 
         this.registerFunction('startMinecraftModPack', (event, resolve, reject) => {
             this.fileController.openMinecraftLauncher()
@@ -82,6 +84,26 @@ export default class App {
             })
                 .then(value => event.sender.send(name, value))
                 .catch(console.log)
+        })
+    }
+
+    registerFunctionProcess(
+        name: string,
+        functionCallBack: (
+            subscriber: Subscriber<any>,
+            args: any,
+            event: IpcMainEvent
+        ) => void
+    ): void {
+        ipcMain.on(name, (event, args) => {
+            new Observable<any>(subscriber => {
+                functionCallBack(subscriber, args, event)
+            })
+                .subscribe({
+                    next(value) { event.sender.send(`${name}_next`, value) },
+                    complete() { event.sender.send(`${name}_complete`) },
+                    error(err) { event.sender.send(`${name}_error`, err)}
+                })
         })
     }
 }

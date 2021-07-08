@@ -31,26 +31,24 @@ export class HomeComponent implements OnInit {
           this.instanceState = InstanceState.installed
         }
       }, modPackConfig.id)
-
-      this.app.on('installationStatus', installationState => {
-        const installationStateObject: InstallationStatus = JSON.parse(installationState)
-        this.percentage = installationStateObject.percentage
-        this.installStatus = installationStateObject
-      })
     })
   }
 
   get logoPath(): string {
-      return `assets/${this.logoSrc}`
+    return `assets/${this.logoSrc}`
   }
 
   installMinecraftModPack() {
     this.instanceState = InstanceState.installing
-    this.app.request('installMinecraftModPack', () => {
-      setTimeout(() => {
-        this.instanceState = InstanceState.installed
-      }, 1000)
-    }, this.modPackId)
+    this.app.requestProcess('installMinecraftModPack', this.modPackId)
+      .subscribe({
+        next: (status) => {
+          this.installStatus = status
+        },
+        complete: () => {
+          this.instanceState = InstanceState.installed
+        }
+      })
   }
 
   startMinecraftModPack() {
