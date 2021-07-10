@@ -1,11 +1,11 @@
-<div id="prompt-container">
+<div id="prompt-container" *ngIf="active">
   <div id="prompt">
     <div id="prompt-top-nav">
       <div id="prompt-top-left-nav-container">
 
       </div>
 
-      <div id="prompt-top-right-nav-container">
+      <div id="prompt-top-right-nav-container" (click)="close()">
         <div class="nav-elem nav-elem-button">
           <mat-icon>
             close

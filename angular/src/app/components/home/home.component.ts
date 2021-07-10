@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AppService} from "../services/app.service";
 import InstanceState from "../../util/InstanceState";
 import InstallationStatus from "../../util/InstallationStatus";
+import {InstallPromptComponent} from "../install-prompt/install-prompt.component";
 
 @Component({
   selector: 'app-home',
@@ -17,6 +18,9 @@ export class HomeComponent implements OnInit {
   instanceState = InstanceState.notInstalled
   installStatus?: InstallationStatus
   percentage: number = 0
+
+  @ViewChild(InstallPromptComponent)
+  installPrompt?: InstallPromptComponent
 
   constructor(private app: AppService) { }
 
@@ -39,7 +43,11 @@ export class HomeComponent implements OnInit {
   }
 
   openInstallPrompt() {
-
+    console.log("Evaluating Child Component")
+    if (this.installPrompt) {
+      console.log("Child Component exists")
+      this.installPrompt.open(this.modPackId)
+    }
   }
 
   installMinecraftModPack() {
