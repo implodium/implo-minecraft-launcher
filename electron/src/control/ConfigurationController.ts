@@ -69,6 +69,28 @@ export class ConfigurationController {
         }
     }
 
+    private updateConfiguration(config: LauncherConfiguration): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.loadedConfiguration = new Promise(resolve => {
+                resolve(config)
+            })
+
+            const configurationPath = this.pathController
+                .installPath
+                .path
+                .relativeToPath("launcher-config.json")
+
+            fs.writeFile(configurationPath, JSON.stringify(config), (err: Error) => {
+                if (!err) {
+                    resolve()
+                } else {
+                    console.log()
+                    reject(err)
+                }
+            })
+        })
+    }
+
     get minecraftLauncherConfiguration(): Promise<MinecraftLauncherProfiles> {
         if (this.loadedMinecraftLauncherConfiguration) {
             return this.loadedMinecraftLauncherConfiguration
@@ -131,4 +153,28 @@ export class ConfigurationController {
         })
     }
 
+    setMemory(modPackId: string, newMemoryValue: number): Promise<MinecraftLauncherProfiles> {
+        return new Promise((resolve, reject) => {
+            this.configuration
+                .then(config => {
+                    const modPackConfig = config.modPacks.filter(modPack => {
+                        return modPack.id === modPackId
+                    })[0]
+
+                    if (modPackConfig) {
+                        modPackConfig.mineCraftOpt.javaArgs = ConfigurationController
+                            .javaArgsWith(newMemoryValue)
+
+                        this.updateConfiguration(config)
+                            .then(() => resolve(undefined))
+                    } else {
+                        reject('modPack not found')
+                    }
+                })
+        })
+    }
+
+    private static javaArgsWith(memory: number) {
+        return `-Xmx${memory}G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M`
+    }
 }

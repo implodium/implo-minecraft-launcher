@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import InstallationStatus from "../../util/InstallationStatus";
 import {AppService} from "../services/app.service";
+import ChangeMcMemoryRequest from "../../util/ChangeMcMemoryRequest";
 
 @Component({
   selector: 'app-install-prompt',
@@ -14,7 +15,7 @@ export class InstallPromptComponent implements OnInit {
   pageMax: number = 3
   finished: boolean = false
   installStatus?: InstallationStatus
-  active: boolean = true
+  active: boolean = false
 
   @Output("installFinished")
   installFinished = new EventEmitter<void>()
@@ -46,20 +47,38 @@ export class InstallPromptComponent implements OnInit {
 
   install() {
     this.next()
-    console.log(this.modPackId)
-    if (this.modPackId) {
-      this.app.requestProcess('installMinecraftModPack', this.modPackId)
-        .subscribe({
-          next: (status) => {
-            this.installStatus = status
-          },
-          complete: () => {
-            this.finished = true
-            this.installFinished.emit()
-          }
-        })
-    }
+    this.updateMemory()
+      .then(() => {
+        if (this.modPackId) {
+          this.app.requestProcess('installMinecraftModPack', this.modPackId)
+            .subscribe({
+              next: (status) => {
+                this.installStatus = status
+              },
+              complete: () => {
+                this.finished = true
+                this.installFinished.emit()
+              }
+            })
+        }
+     });
   }
+
+  updateMemory(): Promise<void> {
+    return new Promise(resolve => {
+      if (this.modPackId) {
+        const changeMemoryRequest: ChangeMcMemoryRequest = {
+          newMemoryValue: this.memoryValue,
+          modPackId: this.modPackId
+        }
+
+        this.app.request("rewriteMcConfig", () => {
+          resolve()
+        }, JSON.stringify(changeMemoryRequest));
+      }
+    })
+  }
+
 
   close() {
     this.active = false

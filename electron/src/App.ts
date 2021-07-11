@@ -5,6 +5,8 @@ import {inject, injectable} from "inversify";
 import SetupController from "./control/SetupController";
 import ModPackController from "./control/ModPackController";
 import {Observable, Subscriber} from "rxjs";
+import {ConfigurationController} from "./control/ConfigurationController";
+import ChangeMcMemoryRequest from "./uitl/ChangeMcMemoryRequest";
 
 @injectable()
 export default class App {
@@ -14,7 +16,8 @@ export default class App {
         @inject(ElectronController) public electronController: ElectronController,
         @inject(FileController) public fileController: FileController,
         @inject(SetupController) private setupController: SetupController,
-        @inject(ModPackController) private modPackController: ModPackController
+        @inject(ModPackController) private modPackController: ModPackController,
+        @inject(ConfigurationController) private configController: ConfigurationController
     ) {}
 
     init() {
@@ -73,6 +76,19 @@ export default class App {
                 .then(resolve)
                 .catch(console.log)
         }))
+
+        this.registerFunction("rewriteMcConfig", (
+            event,
+            resolve,
+            reject,
+            args: any
+        ) => {
+            const request: ChangeMcMemoryRequest = JSON.parse(args)
+            this.configController.setMemory(request.modPackId, request.newMemoryValue)
+                .then(resolve)
+                .catch(console.log)
+        })
+
     }
 
     registerFunction(
