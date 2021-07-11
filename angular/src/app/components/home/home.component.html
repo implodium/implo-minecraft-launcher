@@ -7,24 +7,18 @@
   <div id="navigation">
     <div *ngIf="instanceState === InstanceState.installed"
          id="play-button"
-         (click)="openInstallPrompt()"
+         (click)="startMinecraftModPack()"
          class="button">
       Play
     </div>
 
-    <div *ngIf="instanceState === InstanceState.installing && installStatus"
-         id="percentage-button"
-         class="button">
-      {{ installStatus.percentage }} %
-    </div>
-
     <div *ngIf="instanceState === InstanceState.notInstalled"
          id="install-button"
-         (click)="installMinecraftModPack()"
+         (click)="openInstallPrompt()"
          class="button">
       Install
     </div>
   </div>
 </div>
 
-<app-install-prompt></app-install-prompt>
+<app-install-prompt (installFinished)="changeToInstallState()"></app-install-prompt>

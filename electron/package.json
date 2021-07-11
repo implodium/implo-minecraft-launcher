@@ -18,6 +18,7 @@
     "onezip": "^5.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.1.0",
+    "systeminformation": "^5.7.7",
     "wget-improved": "^3.2.1"
   }
 }

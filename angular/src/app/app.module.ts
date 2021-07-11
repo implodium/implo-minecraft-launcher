@@ -13,7 +13,10 @@ import { LoadingScreenComponent } from './components/loading-screen/loading-scre
 import { HomeComponent } from './components/home/home.component';
 import { InstallPromptComponent } from './components/install-prompt/install-prompt.component';
 import {MatIconModule} from "@angular/material/icon";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatSliderModule} from "@angular/material/slider";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 @NgModule({
   declarations: [
@@ -23,15 +26,19 @@ import {FormsModule} from "@angular/forms";
     MainComponent,
     LoadingScreenComponent,
     HomeComponent,
-    InstallPromptComponent
+    InstallPromptComponent,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     RouterModule.forRoot(Routes),
     NgxElectronModule,
     MatIconModule,
-    FormsModule
+    FormsModule,
+    MatSliderModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

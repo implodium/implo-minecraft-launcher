@@ -67,6 +67,12 @@ export default class App {
                 .then(resolve)
                 .catch(reject)
         })
+
+        this.registerFunction("getMaxMemory", ((event, resolve) => {
+            this.fileController.getMemoryInfo()
+                .then(resolve)
+                .catch(console.log)
+        }))
     }
 
     registerFunction(

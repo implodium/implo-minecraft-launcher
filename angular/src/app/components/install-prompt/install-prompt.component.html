@@ -15,7 +15,7 @@
     </div>
 
     <div id="prompt-content">
-      <div [ngSwitch]="pageNo">
+      <div [ngSwitch]="pageNo" id="page-switch">
         <div id="prompt-content-1" class="prompt-content" *ngSwitchCase="1">
           <h1>Information</h1>
           <p>
@@ -34,11 +34,45 @@
         </div>
 
         <div id="prompt-content-2" class="prompt-content" *ngSwitchCase="2">
-          2
+          <h1>Memory</h1>
+
+          <div id="memory-content" *ngIf="maxMemory">
+
+            <div id="memory-content-slider">
+              <span>{{ minMemory }}</span>
+
+              <mat-slider
+                [min]="minMemory"
+                [max]="maxMemory"
+                step="1"
+                tickInterval="1"
+                [(ngModel)]="memoryValue"
+              >
+              </mat-slider>
+
+              <span>{{ maxMemory }}</span>
+            </div>
+
+            <div id="memory-content-value">
+              <span>{{ memoryValue }}GB</span>
+            </div>
+
+            <span class="err-text" *ngIf="!maxMemory">
+              total memory not found
+            </span>
+
+          </div>
         </div>
 
         <div id="prompt-content-3" class="prompt-content" *ngSwitchCase="3">
-          3
+          <h1>Install</h1>
+
+          <div id="install-content-progress" *ngIf="installStatus">
+            <mat-progress-bar color="accent" [value]="installStatus.percentage"></mat-progress-bar>
+            <span> {{ installStatus.percentage }} % </span>
+            <span> {{ installStatus.installationStep }} </span>
+          </div>
+
         </div>
       </div>
     </div>

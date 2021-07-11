@@ -8,6 +8,8 @@ import InstallationStatus from "../uitl/InstallationStatus";
 import {injectable} from "inversify";
 import LauncherConfiguration from "../uitl/LauncherConfiguration";
 import {Observable} from "rxjs";
+import * as si from "systeminformation"
+import MemoryInfo from "../uitl/MemoryInfo";
 const fsExtra = require('fs-extra')
 const zip = require('onezip')
 
@@ -358,6 +360,16 @@ export default class FileController {
                 .on('progress', (percentage:any) => {
                     subscriber.next(percentage)
                 })
+        })
+    }
+
+    getMemoryInfo() {
+        return new Promise((resolve, reject) => {
+            si.mem()
+                .then((memoryInfo: MemoryInfo) => {
+                    resolve(memoryInfo.total)
+                })
+                .catch(reject)
         })
     }
 }

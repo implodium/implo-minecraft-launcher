@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300&display=swap');
+@import '~@angular/material/prebuilt-themes/purple-green.css';
 /*font-family: 'Open Sans Condensed', sans-serif;*/
 
 body {

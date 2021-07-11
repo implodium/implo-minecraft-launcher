@@ -45,6 +45,11 @@
   height: 70%;
 }
 
+#page-switch {
+  width: 100%;
+  height: 100%;
+}
+
 #prompt-bottom-nav {
   width: 90%;
   height: 20%;
@@ -73,4 +78,70 @@
 
 #prompt-bottom-nav .green-button {
   background-color: #42b983;
+}
+
+.prompt-content h1 {
+  font-size: 5vh;
+  height: 10%;
+}
+
+#prompt-content-2 {
+  display: flex;
+  flex-direction: column;
+}
+
+#memory-content {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#memory-content-slider {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-direction: row;
+}
+
+#memory-content-value {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+#memory-content-value input {
+  width: 3vw;
+  margin-right: 0.5vw;
+}
+
+.mat-slider {
+  width: 90%;
+  margin: 0 3%;
+}
+
+#prompt-content-3 {
+  width: 100%;
+  height: 100%;
+}
+
+#install-content-progress {
+  height: 90%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#install-content-progress * {
+  margin: 1vh 0;
 }

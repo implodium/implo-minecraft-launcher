@@ -18,10 +18,18 @@ export class InstallPromptComponent implements OnInit {
 
   @Output("installFinished")
   installFinished = new EventEmitter<void>()
+  memory: number = 8
+  maxMemory?: number
+  minMemory: number = 1
+  memoryValue: number = 7
 
   constructor(private app: AppService) { }
 
   ngOnInit(): void {
+    this.app.request("getMaxMemory", (args: number) => {
+      this.maxMemory = Math.round(args / 1073741824)
+      this.memoryValue = this.maxMemory / 2
+    })
   }
 
   previous() {
@@ -37,6 +45,8 @@ export class InstallPromptComponent implements OnInit {
   }
 
   install() {
+    this.next()
+    console.log(this.modPackId)
     if (this.modPackId) {
       this.app.requestProcess('installMinecraftModPack', this.modPackId)
         .subscribe({
@@ -44,6 +54,7 @@ export class InstallPromptComponent implements OnInit {
             this.installStatus = status
           },
           complete: () => {
+            this.finished = true
             this.installFinished.emit()
           }
         })
@@ -59,6 +70,10 @@ export class InstallPromptComponent implements OnInit {
   open(id: string) {
     this.modPackId = id
     this.active = true
+  }
+
+  sliderFormat(value: number) {
+    return value + "gb"
   }
 
 }
