@@ -72,7 +72,7 @@ export class InstallPromptComponent implements OnInit {
           modPackId: this.modPackId
         }
 
-        this.app.request("rewriteMcConfig", () => {
+        this.app.request("changeMemory", () => {
           resolve()
         }, JSON.stringify(changeMemoryRequest));
       }

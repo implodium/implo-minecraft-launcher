@@ -77,7 +77,7 @@ export default class App {
                 .catch(console.log)
         }))
 
-        this.registerFunction("rewriteMcConfig", (
+        this.registerFunction("changeMemory", (
             event,
             resolve,
             reject,
