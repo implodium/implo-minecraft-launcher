@@ -19,6 +19,9 @@ export class MainComponent implements OnInit {
       if (!args) {
         this.router.navigate(['/setup'])
           .catch(console.log)
+      } else {
+        this.router.navigate(['/home'])
+          .catch(console.log)
       }
     })
   }
