@@ -1,10 +1,6 @@
 {
   "name": "implo-launcher",
   "version": "1.0.0",
-  "workspaces": [
-    "electron",
-    "angular"
-  ],
   "main": "electron/src/index.js",
   "scripts": {
     "init": "npm run angular:watch",
