@@ -95,6 +95,29 @@ export class ConfigurationController {
         })
     }
 
+    updateMcProfiles(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.configuration
+                .then(config => {
+                    this.minecraftLauncherConfiguration
+                        .then(mcConfig => {
+                            this.getmodPackConfigBy(config.lastModPackID)
+                                .then(modPackConfig => {
+                                    mcConfig.profiles[config.lastModPackID]
+                                        = modPackConfig.mineCraftOpt
+                                    
+                                    resolve()
+
+                                    this.writeMinecraftLauncherConfiguration(mcConfig)
+                                        .catch(reject)
+                                })
+                        })
+                        .catch(reject)
+                })
+                .catch(reject)
+        })
+    }
+
     writeMinecraftLauncherConfiguration(config: MinecraftLauncherProfiles): Promise<void> {
         return new Promise((resolve, reject) => {
             const configPath = this.pathController

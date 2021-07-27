@@ -67,6 +67,7 @@ export default class App {
 
         this.registerFunction('startMinecraftModPack', (event, resolve, reject) => {
             this.fileController.openMinecraftLauncher()
+                .then(() => this.configController.updateMcProfiles())
                 .then(resolve)
                 .catch(reject)
         })
