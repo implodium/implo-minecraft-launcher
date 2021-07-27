@@ -1,11 +1,24 @@
 import ElectronController from "./control/ElectronController";
 import {app, ipcMain, IpcMainEvent} from "electron";
 import FileController from "./control/FileController";
+import {inject, injectable} from "inversify";
+import SetupController from "./control/SetupController";
+import ModPackController from "./control/ModPackController";
+import {Observable, Subscriber} from "rxjs";
+import {ConfigurationController} from "./control/ConfigurationController";
+import ChangeMcMemoryRequest from "./uitl/ChangeMcMemoryRequest";
 
+@injectable()
 export default class App {
-    static readonly app: App = new App();
-    readonly electronController: ElectronController = new ElectronController();
-    readonly fileController: FileController = new FileController();
+    public static app: App
+
+    constructor(
+        @inject(ElectronController) public electronController: ElectronController,
+        @inject(FileController) public fileController: FileController,
+        @inject(SetupController) private setupController: SetupController,
+        @inject(ModPackController) private modPackController: ModPackController,
+        @inject(ConfigurationController) private configController: ConfigurationController
+    ) {}
 
     init() {
         this.electronController.createWindow();
@@ -13,8 +26,8 @@ export default class App {
         app.on('window-all-closed', app.quit)
 
         this.registerFunction('checkInstallation', (event, resolve) => {
-            this.fileController.checkInstallation()
-                .then(isInstalled => resolve(isInstalled))
+            this.setupController.isBaseInstalled()
+                .then(resolve)
                 .catch(console.log)
         })
 
@@ -23,47 +36,60 @@ export default class App {
         })
 
         this.registerFunction('getPath', (event, resolve) => {
-            resolve(this.fileController.installPath.toString())
+            resolve(this.setupController.basePath)
         })
 
         this.registerFunction('installBase', (event, resolve, reject) => {
-            this.fileController.installBase()
-                .then(() => resolve(null))
-                .catch(err => reject(err));
+            this.setupController.installBase()
+                .then(resolve)
+                .catch(reject)
         })
 
-        this.registerFunction('getLastModPack', (event, resolve, reject) => {66
-            this.fileController.getLastModPack()
+        this.registerFunction('getLastModPack', (event, resolve, reject) => {
+            this.modPackController.lastModPack
                 .then(resolve)
                 .catch(reject)
         })
 
         this.registerFunction('checkModPackInstallation', (event, resolve, reject, args) => {
-            this.fileController.checkModPackInstallation(args)
+            this.modPackController.isInstalled(args)
                 .then(resolve)
                 .catch(console.log)
         })
 
-        this.registerFunction('installMinecraftModPack', (event, resolve, reject, args) => {
-            const finished: Array<Promise<any>> = []
-
-            this.fileController.installMinecraftModPack(args, event)
-                .then(() => {
-                    finished.push(this.fileController.writeConfigurationIntoMinecraftLauncher(args, event))
-                    finished.push(this.fileController.copyFilesIntoMinecraftHome(args, event))
-
-                    Promise.all(finished)
-                        .then(resolve)
-                        .catch(reject)
-                })
-                .catch(console.log)
-        })
+        this.registerFunctionProcess(
+            'installMinecraftModPack',
+            (subscriber, args) => {
+                this.modPackController.install(args)
+                    .subscribe(subscriber)
+            }
+        )
 
         this.registerFunction('startMinecraftModPack', (event, resolve, reject) => {
             this.fileController.openMinecraftLauncher()
+                .then(() => this.configController.updateMcProfiles())
                 .then(resolve)
                 .catch(reject)
         })
+
+        this.registerFunction("getMaxMemory", ((event, resolve) => {
+            this.fileController.getMemoryInfo()
+                .then(resolve)
+                .catch(console.log)
+        }))
+
+        this.registerFunction("changeMemory", (
+            event,
+            resolve,
+            reject,
+            args: any
+        ) => {
+            const request: ChangeMcMemoryRequest = JSON.parse(args)
+            this.configController.setMemory(request.modPackId, request.newMemoryValue)
+                .then(resolve)
+                .catch(console.log)
+        })
+
     }
 
     registerFunction(
@@ -81,6 +107,26 @@ export default class App {
             })
                 .then(value => event.sender.send(name, value))
                 .catch(console.log)
+        })
+    }
+
+    registerFunctionProcess(
+        name: string,
+        functionCallBack: (
+            subscriber: Subscriber<any>,
+            args: any,
+            event: IpcMainEvent
+        ) => void
+    ): void {
+        ipcMain.on(name, (event, args) => {
+            new Observable<any>(subscriber => {
+                functionCallBack(subscriber, args, event)
+            })
+                .subscribe({
+                    next(value) { event.sender.send(`${name}_next`, value) },
+                    complete() { event.sender.send(`${name}_complete`) },
+                    error(err) { event.sender.send(`${name}_error`, err)}
+                })
         })
     }
 }

@@ -6,7 +6,7 @@ import {HomeComponent} from "./components/home/home.component";
 const routes: Routes = [
   {path: '', component: MainComponent},
   {path: 'setup', component: SetupComponent},
-  {path: 'home', component: HomeComponent}
+  {path: 'home', component: HomeComponent},
 ]
 
 export default routes;

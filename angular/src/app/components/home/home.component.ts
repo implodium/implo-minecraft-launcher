@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AppService} from "../services/app.service";
-import InstallationState from "../../util/InstallationState";
+import InstanceState from "../../util/InstanceState";
+import {InstallPromptComponent} from "../install-prompt/install-prompt.component";
 
 @Component({
   selector: 'app-home',
@@ -12,9 +13,11 @@ export class HomeComponent implements OnInit {
   logoSrc: string = "";
   imageFound: boolean = true
   modPackId: string = "";
-  InstallationState = InstallationState
-  installationState = InstallationState.notInstalled
-  percentage: number = 0
+  InstanceState = InstanceState
+  instanceState = InstanceState.notInstalled
+
+  @ViewChild(InstallPromptComponent)
+  installPrompt?: InstallPromptComponent
 
   constructor(private app: AppService) { }
 
@@ -26,32 +29,29 @@ export class HomeComponent implements OnInit {
 
       this.app.request('checkModPackInstallation', isInstalled => {
         if(isInstalled) {
-          this.installationState = InstallationState.installed
+          this.instanceState = InstanceState.installed
         }
       }, modPackConfig.id)
-
-      this.app.on('installationPercentage', percentage => {
-        this.percentage = percentage;
-      })
     })
   }
 
   get logoPath(): string {
-      return `assets/${this.logoSrc}`
+    return `assets/${this.logoSrc}`
   }
 
-  installMinecraftModPack() {
-    this.installationState = InstallationState.installing
-    this.app.request('installMinecraftModPack', () => {
-      setTimeout(() => {
-        this.installationState = InstallationState.installed
-      }, 1000)
-    }, this.modPackId)
+  openInstallPrompt() {
+    if (this.installPrompt) {
+      this.installPrompt.open(this.modPackId)
+    }
   }
 
   startMinecraftModPack() {
     this.app.request('startMinecraftModPack', () => {
       this.app.request("quit", () => { })
     })
+  }
+
+  changeToInstallState() {
+    this.instanceState = InstanceState.installed
   }
 }
