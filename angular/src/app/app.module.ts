@@ -17,6 +17,9 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatSliderModule} from "@angular/material/slider";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatInputModule} from "@angular/material/input";
+import { SettingsWindowComponent } from './components/settings-window/settings-window.component';
+import { WindowComponent } from './components/window/window.component';
 
 @NgModule({
   declarations: [
@@ -27,19 +30,22 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
     LoadingScreenComponent,
     HomeComponent,
     InstallPromptComponent,
+    SettingsWindowComponent,
+    WindowComponent,
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    ReactiveFormsModule,
-    AppRoutingModule,
-    RouterModule.forRoot(Routes),
-    NgxElectronModule,
-    MatIconModule,
-    FormsModule,
-    MatSliderModule,
-    MatProgressBarModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        AppRoutingModule,
+        RouterModule.forRoot(Routes),
+        NgxElectronModule,
+        MatIconModule,
+        FormsModule,
+        MatSliderModule,
+        MatProgressBarModule,
+        MatInputModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

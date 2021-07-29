@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {AppService} from "../services/app.service";
 import InstanceState from "../../util/InstanceState";
 import {InstallPromptComponent} from "../install-prompt/install-prompt.component";
+import {SettingsWindowComponent} from "../settings-window/settings-window.component";
 
 @Component({
   selector: 'app-home',
@@ -15,9 +16,13 @@ export class HomeComponent implements OnInit {
   modPackId: string = "";
   InstanceState = InstanceState
   instanceState = InstanceState.notInstalled
+  memory: number = -1;
 
   @ViewChild(InstallPromptComponent)
   installPrompt?: InstallPromptComponent
+
+  @ViewChild(SettingsWindowComponent)
+  settingsWindow?: SettingsWindowComponent
 
   constructor(private app: AppService) { }
 
@@ -26,6 +31,9 @@ export class HomeComponent implements OnInit {
       this.modPackName = modPackConfig.name;
       this.logoSrc = modPackConfig.logo;
       this.modPackId = modPackConfig.id;
+      this.memory = modPackConfig.memory;
+
+      console.log(modPackConfig)
 
       this.app.request('checkModPackInstallation', isInstalled => {
         if(isInstalled) {
@@ -53,5 +61,11 @@ export class HomeComponent implements OnInit {
 
   changeToInstallState() {
     this.instanceState = InstanceState.installed
+  }
+
+  openSettings() {
+    if (this.settingsWindow) {
+      this.settingsWindow.open()
+    }
   }
 }

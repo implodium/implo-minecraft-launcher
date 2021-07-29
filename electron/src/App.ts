@@ -89,7 +89,6 @@ export default class App {
                 .then(resolve)
                 .catch(console.log)
         })
-
     }
 
     registerFunction(

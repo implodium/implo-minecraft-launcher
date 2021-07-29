@@ -39,3 +39,19 @@
 
   cursor: pointer;
 }
+
+.nav-elem {
+  margin: 0 1vw;
+  cursor: pointer;
+}
+
+.nav-elem input {
+  background-color: grey;
+  border-radius: 2px;
+  border: none;
+  padding: 2vh;
+}
+
+.nav-elem mat-icon {
+  color: grey;
+}
