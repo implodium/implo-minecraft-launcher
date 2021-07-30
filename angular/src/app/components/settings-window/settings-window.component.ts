@@ -23,11 +23,15 @@ export class SettingsWindowComponent implements OnInit {
   ngOnInit(): void {
     this.app.request("getMaxMemory", (args: number) => {
       this.maxMemory = Math.round(args / 1073741824)
-      this.memoryValue = this.maxMemory / 2
     })
   }
 
+  private prepare() {
+    this.getCurrentMemory()
+  }
+
   open(modPackId: string) {
+    this.prepare()
     this.modPackId = modPackId
     if (this.window) {
       this.window.open()
@@ -56,6 +60,13 @@ export class SettingsWindowComponent implements OnInit {
 
   deleteInstallation() {
 
+  }
+
+  getCurrentMemory() {
+    this.app.request("getCurrentMemory", memory => {
+      console.log(memory)
+      this.memoryValue = memory
+    }, this.modPackId)
   }
 
   updateButtonText() {
