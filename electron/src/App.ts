@@ -89,6 +89,12 @@ export default class App {
                 .then(resolve)
                 .catch(console.log)
         })
+
+        this.registerFunction("getCurrentMemory", (event, resolve, reject, args) => {
+            this.configController.getCurrentMemory(args)
+                .then(resolve)
+                .catch(reject)
+        })
     }
 
     registerFunction(
