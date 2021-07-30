@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit {
 
   openSettings() {
     if (this.settingsWindow) {
-      this.settingsWindow.open()
+      this.settingsWindow.open(this.modPackId)
     }
   }
 }

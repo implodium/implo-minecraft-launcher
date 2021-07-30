@@ -11,11 +11,12 @@
         step="1"
         tickInterval="1"
         [(ngModel)]="memoryValue"
+        (change)="updateButtonText()"
       >
       </mat-slider>
 
       <div class="button" (click)="saveMemory()">
-        Save
+        {{ saveButtonText }}
       </div>
 
     </div>

@@ -1,6 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {WindowComponent} from "../window/window.component";
 import {AppService} from "../services/app.service";
+import ChangeMcMemoryRequest from "../../util/ChangeMcMemoryRequest";
 
 @Component({
   selector: 'app-settings-window',
@@ -14,6 +15,8 @@ export class SettingsWindowComponent implements OnInit {
   minMemory: number = 1;
   maxMemory: number = 8;
   memoryValue: number = 4
+  modPackId?: string
+  saveButtonText: string = "Save"
 
   constructor(private app: AppService) { }
 
@@ -24,7 +27,8 @@ export class SettingsWindowComponent implements OnInit {
     })
   }
 
-  open() {
+  open(modPackId: string) {
+    this.modPackId = modPackId
     if (this.window) {
       this.window.open()
     }
@@ -38,10 +42,23 @@ export class SettingsWindowComponent implements OnInit {
 
 
   saveMemory() {
+    if (this.modPackId) {
+      const memoryRequest: ChangeMcMemoryRequest = {
+        newMemoryValue: this.memoryValue,
+        modPackId: this.modPackId,
+      }
 
+      this.app.request("changeMemory", () => {
+        this.saveButtonText = "saved"
+      }, JSON.stringify(memoryRequest));
+    }
   }
 
   deleteInstallation() {
 
+  }
+
+  updateButtonText() {
+    this.saveButtonText = "Save"
   }
 }
