@@ -5,5 +5,6 @@ export interface ModPackConfiguration {
     name: string;
     logo: string;
     installUrl: string;
+    memory: number;
     mineCraftOpt: ProfileConfiguration;
 }

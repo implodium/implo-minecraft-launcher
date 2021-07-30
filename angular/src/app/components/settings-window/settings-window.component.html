@@ -1,0 +1,36 @@
+<app-window>
+  <section id="memory-section">
+    <h2>Memory in Gigabyte</h2>
+
+    <div id="memory-section-content">
+
+      <mat-slider
+        thumbLabel
+        [min]="minMemory"
+        [max]="maxMemory"
+        step="1"
+        tickInterval="1"
+        [(ngModel)]="memoryValue"
+        (change)="updateButtonText()"
+      >
+      </mat-slider>
+
+      <div class="button" (click)="saveMemory()">
+        {{ saveButtonText }}
+      </div>
+
+    </div>
+
+  </section>
+
+  <section>
+    <h2>Danger Zone</h2>
+
+    <div class="button delete-button" (click)="deleteInstallation()">
+      Delete Installation
+    </div>
+
+  </section>
+
+
+</app-window>

@@ -1,0 +1,22 @@
+<div id="window-container" *ngIf="active">
+  <div id="window">
+    <div id="window-top-nav">
+      <div id="window-top-left-nav-container">
+
+      </div>
+
+      <div id="window-top-right-nav-container" (click)="close()">
+        <div class="window-nav-elem window-nav-elem-button">
+          <mat-icon>
+            close
+          </mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <div id="window-content">
+      <ng-content></ng-content>
+    </div>
+
+  </div>
+</div>

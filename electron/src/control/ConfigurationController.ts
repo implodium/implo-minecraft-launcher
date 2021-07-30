@@ -16,6 +16,7 @@ export class ConfigurationController {
                 name: 'Summer 2021',
                 logo: 'img/summer2021.jpg',
                 installUrl: "https://github.com/QuirinEcker/summer2021/releases/download/1.5/summer2021.zip",
+                memory: 8,
                 mineCraftOpt: {
                     created: "1970-01-01T00:00:00.000Z",
                     gameDir: this.pathController
@@ -105,7 +106,7 @@ export class ConfigurationController {
                                 .then(modPackConfig => {
                                     mcConfig.profiles[config.lastModPackID]
                                         = modPackConfig.mineCraftOpt
-                                    
+
                                     resolve()
 
                                     this.writeMinecraftLauncherConfiguration(mcConfig)
@@ -162,8 +163,9 @@ export class ConfigurationController {
                     })[0]
 
                     if (modPackConfig) {
-                        modPackConfig.mineCraftOpt.javaArgs = ConfigurationController
-                            .javaArgsWith(newMemoryValue)
+                        modPackConfig.mineCraftOpt.javaArgs =
+                            ConfigurationController.javaArgsWith(newMemoryValue)
+                        modPackConfig.memory = newMemoryValue;
 
                         this.updateConfiguration(config)
                             .then(() => resolve(undefined))
@@ -171,6 +173,16 @@ export class ConfigurationController {
                         reject('modPack not found')
                     }
                 })
+        })
+    }
+
+    getCurrentMemory(modPackId: string): Promise<number> {
+        return new Promise((resolve, reject) => {
+            this.getmodPackConfigBy(modPackId)
+                .then(config => {
+                    resolve(config.memory)
+                })
+                .catch(reject)
         })
     }
 
