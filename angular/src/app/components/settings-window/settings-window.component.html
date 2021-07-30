@@ -1,3 +1,35 @@
 <app-window>
-  <h1>Window works !!</h1>
+  <section id="memory-section">
+    <h2>Memory in Gigabyte</h2>
+
+    <div id="memory-section-content">
+
+      <mat-slider
+        thumbLabel
+        [min]="minMemory"
+        [max]="maxMemory"
+        step="1"
+        tickInterval="1"
+        [(ngModel)]="memoryValue"
+      >
+      </mat-slider>
+
+      <div class="button" (click)="saveMemory()">
+        Save
+      </div>
+
+    </div>
+
+  </section>
+
+  <section>
+    <h2>Danger Zone</h2>
+
+    <div class="button delete-button" (click)="deleteInstallation()">
+      Delete Installation
+    </div>
+
+  </section>
+
+
 </app-window>
