@@ -6,6 +6,7 @@ export default class Installation {
 
     private _update: Subject<InstallationStatus> = new Subject<InstallationStatus>()
     public _config?: ModPackConfiguration;
+    public cancelled: boolean = false
 
     private status: InstallationStatus = {
         finished: false,
@@ -56,11 +57,15 @@ export default class Installation {
     }
 
     notify() {
-        this._update.next(this.status)
+        if (!this.cancelled) {
+            this._update.next(this.status)
+        }
     }
 
     complete() {
-        this._update.complete()
+        if (!this.cancelled) {
+            this._update.complete()
+        }
     }
 
     get stream(): Observable<InstallationStatus> {

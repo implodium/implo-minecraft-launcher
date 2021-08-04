@@ -111,6 +111,11 @@ export default class App {
         this.registerFunction("open-instance-folder", (event, resolve, reject, args: string) => {
             this.modPackController.openInstanceFolder(args)
         })
+
+        this.registerFunction("cancel-instance-installation", (event, resolve) => {
+            this.modPackController.cancelInstallation()
+            resolve("");
+        })
     }
 
     registerFunction(

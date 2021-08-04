@@ -79,8 +79,17 @@
 
     <div id="prompt-bottom-nav">
       <div id="prompt-bottom-left-nav-container">
-        <div class="nav-elem nav-elem-button" *ngIf="pageNo != 1">
-          <div class="button red-button" (click)="previous()" >previous</div>
+        <div *ngIf="pageNo < pageMax">
+          <div class="nav-elem nav-elem-button" *ngIf="pageNo != 1">
+            <div class="button red-button" (click)="previous()" >previous</div>
+          </div>
+        </div>
+
+        <div *ngIf="pageNo === pageMax">
+          <div class="nav-elem nav-elem-button" *ngIf="pageNo != 1">
+            <div class="button red-button" (click)="cancel()" >cancel
+            </div>
+          </div>
         </div>
       </div>
 

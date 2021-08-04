@@ -81,12 +81,33 @@ export class InstallPromptComponent implements OnInit {
 
 
   close() {
+    this.cancel()
+    this.reset()
     this.active = false
-    this.pageNo = 1
+  }
+
+  reset() {
+    this.resetWindow()
+    this.resetPage()
+    this.resetInstallation()
+  }
+
+  resetWindow() {
     this.modPackId = undefined
   }
 
+  resetPage() {
+    this.pageNo = 1
+  }
+
+  resetInstallation() {
+    this.installStatus = undefined
+    this.finished = false
+
+  }
+
   open(id: string) {
+    this.pageNo = 1
     this.modPackId = id
     this.active = true
   }
@@ -95,4 +116,10 @@ export class InstallPromptComponent implements OnInit {
     return value + "gb"
   }
 
+  cancel() {
+    this.app.request("cancel-instance-installation", () => {
+      this.resetInstallation()
+      this.previous()
+    })
+  }
 }
