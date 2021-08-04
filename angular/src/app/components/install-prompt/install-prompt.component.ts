@@ -84,6 +84,8 @@ export class InstallPromptComponent implements OnInit {
     this.active = false
     this.pageNo = 1
     this.modPackId = undefined
+    this.finished = false
+    this.installStatus = undefined
   }
 
   open(id: string) {

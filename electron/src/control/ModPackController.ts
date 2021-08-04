@@ -23,6 +23,7 @@ export default class ModPackController {
 
     install(id: string): Observable<InstallationStatus> {
         const installation = new Installation(id)
+        this.isCancelScheduled = false
 
         this.initiateConfig(installation)
             .then(installation => this.download(installation))
