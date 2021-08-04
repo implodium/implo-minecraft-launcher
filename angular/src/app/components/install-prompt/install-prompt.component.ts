@@ -95,4 +95,7 @@ export class InstallPromptComponent implements OnInit {
     return value + "gb"
   }
 
+  cancel() {
+    this.app.request("cancel-instance-installation", () => null)
+  }
 }

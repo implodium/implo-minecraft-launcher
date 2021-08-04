@@ -11,6 +11,9 @@ import MinecraftLauncherProfiles from "../uitl/MinecraftLauncherProfiles";
 @injectable()
 export default class ModPackController {
 
+    installProcess?: Promise<Installation>
+    isCancelScheduled: boolean = false
+
     constructor(
         @inject(FileController) private fileController: FileController,
         @inject(ConfigurationController) private configController: ConfigurationController,
@@ -71,7 +74,9 @@ export default class ModPackController {
     }
 
     private download(installation: Installation): Promise<Installation> {
-        return new Promise((resolve, reject) => {
+        if (this.isCancelScheduled)
+            return new Promise<Installation>(resolve => resolve(installation))
+        else return new Promise((resolve, reject) => {
             installation.getConfiguration()
                 .then(config => {
                     installation.installationStep = 'downloading'
@@ -96,7 +101,9 @@ export default class ModPackController {
     }
 
     private extract(installation: Installation): Promise<Installation> {
-        return new Promise((resolve, reject) => {
+        if (this.isCancelScheduled)
+            return new Promise(resolve => resolve(installation))
+        else return new Promise((resolve, reject) => {
             installation.getConfiguration()
                 .then(config => {
                     installation.installationStep = 'extracting'
@@ -121,7 +128,9 @@ export default class ModPackController {
     }
 
     private copying(installation: Installation): Promise<Installation> {
-        return new Promise((resolve, reject) => {
+        if (this.isCancelScheduled)
+            return new Promise<Installation>(resolve => resolve(installation))
+        else return new Promise((resolve, reject) => {
             installation.getConfiguration()
                 .then(config => {
                     installation.installationStep = 'copying'
@@ -215,5 +224,10 @@ export default class ModPackController {
                 .relativeToPath(`instances/${modPackId}`)
         )
     }
+
+    cancel() {
+        this.isCancelScheduled = true
+    }
+
 }
 
