@@ -43,6 +43,7 @@
 #window-content {
   width: 80%;
   height: 70%;
+  padding: 0 1vw;
 
   overflow-y: scroll;
 }
