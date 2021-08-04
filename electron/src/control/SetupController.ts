@@ -33,4 +33,13 @@ export default class SetupController {
                 .catch(reject)
         })
     }
+
+    deleteAll(): Promise<void> {
+        return this.fileController.deleteFolder(
+            this.pathController
+                .installPath
+                .path
+                .toString()
+        )
+    }
 }
