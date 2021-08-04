@@ -11,8 +11,7 @@ import MinecraftLauncherProfiles from "../uitl/MinecraftLauncherProfiles";
 @injectable()
 export default class ModPackController {
 
-    installProcess?: Promise<Installation>
-    isCancelScheduled: boolean = false
+    installations: Array<Installation> = []
 
     constructor(
         @inject(FileController) private fileController: FileController,
@@ -23,7 +22,7 @@ export default class ModPackController {
 
     install(id: string): Observable<InstallationStatus> {
         const installation = new Installation(id)
-        this.isCancelScheduled = false
+        this.installations.push(installation)
 
         this.initiateConfig(installation)
             .then(installation => this.download(installation))
@@ -75,7 +74,7 @@ export default class ModPackController {
     }
 
     private download(installation: Installation): Promise<Installation> {
-        if (this.isCancelScheduled)
+        if (installation.cancelled)
             return new Promise<Installation>(resolve => resolve(installation))
         else return new Promise((resolve, reject) => {
             installation.getConfiguration()
@@ -102,7 +101,7 @@ export default class ModPackController {
     }
 
     private extract(installation: Installation): Promise<Installation> {
-        if (this.isCancelScheduled)
+        if (installation.cancelled)
             return new Promise(resolve => resolve(installation))
         else return new Promise((resolve, reject) => {
             installation.getConfiguration()
@@ -129,7 +128,7 @@ export default class ModPackController {
     }
 
     private copying(installation: Installation): Promise<Installation> {
-        if (this.isCancelScheduled)
+        if (installation.cancelled)
             return new Promise<Installation>(resolve => resolve(installation))
         else return new Promise((resolve, reject) => {
             installation.getConfiguration()
@@ -226,8 +225,9 @@ export default class ModPackController {
         )
     }
 
-    cancel() {
-        this.isCancelScheduled = true
+    cancelInstallation() {
+        console.log(this.installations.length)
+        this.installations[this.installations.length - 1].cancelled = true;
     }
 
 }
