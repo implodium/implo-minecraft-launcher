@@ -13,6 +13,7 @@ import MemoryInfo from "../uitl/MemoryInfo";
 const fsExtra = require('fs-extra')
 const zip = require('onezip')
 const rimraf = require('rimraf')
+const openExplorer = require('open-file-explorer')
 
 @injectable()
 export default class FileController {
@@ -384,5 +385,9 @@ export default class FileController {
                 }
             })
         })
+    }
+
+    openFolder(path: string) {
+        openExplorer(path)
     }
 }

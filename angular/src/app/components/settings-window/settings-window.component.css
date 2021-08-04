@@ -28,6 +28,10 @@
   background-color: #C02942;
 }
 
+.success-button {
+  background-color: #42b983;
+}
+
 mat-slider {
   width: 50%;
 }
