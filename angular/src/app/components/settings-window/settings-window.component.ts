@@ -4,6 +4,7 @@ import {AppService} from "../services/app.service";
 import ChangeMcMemoryRequest from "../../util/ChangeMcMemoryRequest";
 import {EventEmitter} from "@angular/core";
 import InstanceState from "../../util/InstanceState";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -27,7 +28,7 @@ export class SettingsWindowComponent implements OnInit {
   @Output()
   deleteInstance = new EventEmitter<void>();
 
-  constructor(private app: AppService) { }
+  constructor(private app: AppService, private router: Router) { }
 
   ngOnInit(): void {
     this.app.request("getMaxMemory", (args: number) => {
@@ -89,7 +90,10 @@ export class SettingsWindowComponent implements OnInit {
   }
 
   deleteLauncherData() {
-
+    this.app.request("delete-launcher-data", () => {
+      this.router.navigate([""])
+        .catch()
+    })
   }
 
   isInstalled() {

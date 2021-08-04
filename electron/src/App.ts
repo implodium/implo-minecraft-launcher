@@ -101,6 +101,12 @@ export default class App {
                 .then(resolve)
                 .catch(reject)
         }))
+
+        this.registerFunction("delete-launcher-data", (event, resolve, reject) => {
+            this.setupController.deleteAll()
+                .then(resolve)
+                .catch(reject)
+        })
     }
 
     registerFunction(
