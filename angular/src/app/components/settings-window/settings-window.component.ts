@@ -59,7 +59,11 @@ export class SettingsWindowComponent implements OnInit {
   }
 
   deleteInstallation() {
-
+    if (this.modPackId) {
+      this.app.request("deleteInstance", () => {
+        this.close()
+      }, this.modPackId)
+    }
   }
 
   getCurrentMemory() {

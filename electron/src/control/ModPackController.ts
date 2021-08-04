@@ -197,4 +197,14 @@ export default class ModPackController {
 
         return this.fileController.copy(from, to)
     }
+
+    deleteBy(id: string): Promise<void> {
+        return this.fileController.deleteFolder(
+            this.pathController
+                .installPath
+                .path
+                .relativeToPath(`instances/${id}`)
+        )
+    }
 }
+
