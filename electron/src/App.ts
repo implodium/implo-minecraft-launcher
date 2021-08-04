@@ -95,6 +95,12 @@ export default class App {
                 .then(resolve)
                 .catch(reject)
         })
+
+        this.registerFunction("deleteInstance", ((event, resolve, reject, args: string) => {
+            this.modPackController.deleteBy(args)
+                .then(resolve)
+                .catch(reject)
+        }))
     }
 
     registerFunction(

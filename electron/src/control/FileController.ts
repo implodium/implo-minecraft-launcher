@@ -12,6 +12,7 @@ import * as si from "systeminformation"
 import MemoryInfo from "../uitl/MemoryInfo";
 const fsExtra = require('fs-extra')
 const zip = require('onezip')
+const rimraf = require('rimraf')
 
 @injectable()
 export default class FileController {
@@ -370,6 +371,18 @@ export default class FileController {
                     resolve(memoryInfo.total)
                 })
                 .catch(reject)
+        })
+    }
+
+    deleteFolder(path: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            rimraf(path, (err: any) => {
+                if (!err) {
+                    resolve()
+                } else {
+                    reject(err)
+                }
+            })
         })
     }
 }

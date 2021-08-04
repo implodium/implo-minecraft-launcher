@@ -27,5 +27,5 @@
   </div>
 </div>
 
-<app-install-prompt (installFinished)="changeToInstallState()"></app-install-prompt>
-<app-settings-window></app-settings-window>
+<app-install-prompt (installFinished)="changeInstallState(InstanceState.installed)"></app-install-prompt>
+<app-settings-window (deleteInstance)="changeInstallState(InstanceState.notInstalled)"></app-settings-window>

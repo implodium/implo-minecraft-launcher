@@ -1,7 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, Output, ViewChild} from '@angular/core';
 import {WindowComponent} from "../window/window.component";
 import {AppService} from "../services/app.service";
 import ChangeMcMemoryRequest from "../../util/ChangeMcMemoryRequest";
+import {EventEmitter} from "@angular/core";
+import InstanceState from "../../util/InstanceState";
+
 
 @Component({
   selector: 'app-settings-window',
@@ -10,6 +13,8 @@ import ChangeMcMemoryRequest from "../../util/ChangeMcMemoryRequest";
 })
 export class SettingsWindowComponent implements OnInit {
 
+  InstanceState = InstanceState
+
   @ViewChild(WindowComponent)
   window?: WindowComponent
   minMemory: number = 1;
@@ -17,6 +22,10 @@ export class SettingsWindowComponent implements OnInit {
   memoryValue: number = 4
   modPackId?: string
   saveButtonText: string = "Save"
+  instanceState?: InstanceState
+
+  @Output()
+  deleteInstance = new EventEmitter<void>();
 
   constructor(private app: AppService) { }
 
@@ -30,9 +39,12 @@ export class SettingsWindowComponent implements OnInit {
     this.getCurrentMemory()
   }
 
-  open(modPackId: string) {
+  open(modPackId?: string, instanceState?: InstanceState) {
     this.prepare()
+
     this.modPackId = modPackId
+    this.instanceState = instanceState;
+
     if (this.window) {
       this.window.open()
     }
@@ -43,7 +55,6 @@ export class SettingsWindowComponent implements OnInit {
       this.window.close()
     }
   }
-
 
   saveMemory() {
     if (this.modPackId) {
@@ -59,17 +70,29 @@ export class SettingsWindowComponent implements OnInit {
   }
 
   deleteInstallation() {
-
+    if (this.modPackId) {
+      this.app.request("deleteInstance", () => {
+        this.deleteInstance.emit();
+        this.close()
+      }, this.modPackId)
+    }
   }
 
   getCurrentMemory() {
     this.app.request("getCurrentMemory", memory => {
-      console.log(memory)
       this.memoryValue = memory
     }, this.modPackId)
   }
 
   updateButtonText() {
     this.saveButtonText = "Save"
+  }
+
+  deleteLauncherData() {
+
+  }
+
+  isInstalled() {
+    return this.instanceState === InstanceState.installed
   }
 }
