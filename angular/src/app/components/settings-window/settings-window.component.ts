@@ -99,4 +99,8 @@ export class SettingsWindowComponent implements OnInit {
   isInstalled() {
     return this.instanceState === InstanceState.installed
   }
+
+  openInstanceFolder() {
+    this.app.request("open-instance-folder", () => null, this.modPackId)
+  }
 }

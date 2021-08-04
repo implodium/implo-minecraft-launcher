@@ -206,5 +206,14 @@ export default class ModPackController {
                 .relativeToPath(`instances/${id}`)
         )
     }
+
+    openInstanceFolder(modPackId: string) {
+        this.fileController.openFolder(
+            this.pathController
+                .installPath
+                .path
+                .relativeToPath(`instances/${modPackId}`)
+        )
+    }
 }
 

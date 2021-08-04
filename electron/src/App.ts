@@ -107,6 +107,10 @@ export default class App {
                 .then(resolve)
                 .catch(reject)
         })
+
+        this.registerFunction("open-instance-folder", (event, resolve, reject, args: string) => {
+            this.modPackController.openInstanceFolder(args)
+        })
     }
 
     registerFunction(
