@@ -1,36 +1,51 @@
 <app-window>
-  <section id="memory-section">
-    <h2>Memory in Gigabyte</h2>
 
-    <div id="memory-section-content">
+  <div *ngIf="isInstalled()">
 
-      <mat-slider
-        thumbLabel
-        [min]="minMemory"
-        [max]="maxMemory"
-        step="1"
-        tickInterval="1"
-        [(ngModel)]="memoryValue"
-        (change)="updateButtonText()"
-      >
-      </mat-slider>
+    <section id="memory-section">
+      <h2>Memory in Gigabyte</h2>
 
-      <div class="button" (click)="saveMemory()">
-        {{ saveButtonText }}
+      <div id="memory-section-content">
+
+        <mat-slider
+          thumbLabel
+          [min]="minMemory"
+          [max]="maxMemory"
+          step="1"
+          tickInterval="1"
+          [(ngModel)]="memoryValue"
+          (change)="updateButtonText()"
+        >
+        </mat-slider>
+
+        <div class="button" (click)="saveMemory()">
+          {{ saveButtonText }}
+        </div>
+
       </div>
 
-    </div>
-
-  </section>
+    </section>
+  </div>
 
   <section>
+
     <h2>Danger Zone</h2>
 
-    <div class="button delete-button" (click)="deleteInstallation()">
-      Delete Installation
+    <div *ngIf="isInstalled()">
+      <h3>Delete {{modPackId}}</h3>
+
+      <div class="button delete-button" (click)="deleteInstallation()">
+        Delete Installation
+      </div>
+    </div>
+
+    <h3>Delete Launcher Data</h3>
+    <h4>Note this will quit the Launcher</h4>
+
+    <div class="button delete-button" (click)="deleteLauncherData()">
+      Delete Launcher Data
     </div>
 
   </section>
-
 
 </app-window>
