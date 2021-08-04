@@ -1,7 +1,9 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, Output, ViewChild} from '@angular/core';
 import {WindowComponent} from "../window/window.component";
 import {AppService} from "../services/app.service";
 import ChangeMcMemoryRequest from "../../util/ChangeMcMemoryRequest";
+import {EventEmitter} from "@angular/core";
+
 
 @Component({
   selector: 'app-settings-window',
@@ -17,6 +19,9 @@ export class SettingsWindowComponent implements OnInit {
   memoryValue: number = 4
   modPackId?: string
   saveButtonText: string = "Save"
+
+  @Output()
+  deleteInstance = new EventEmitter<void>();
 
   constructor(private app: AppService) { }
 
@@ -44,7 +49,6 @@ export class SettingsWindowComponent implements OnInit {
     }
   }
 
-
   saveMemory() {
     if (this.modPackId) {
       const memoryRequest: ChangeMcMemoryRequest = {
@@ -61,6 +65,7 @@ export class SettingsWindowComponent implements OnInit {
   deleteInstallation() {
     if (this.modPackId) {
       this.app.request("deleteInstance", () => {
+        this.deleteInstance.emit();
         this.close()
       }, this.modPackId)
     }
@@ -68,7 +73,6 @@ export class SettingsWindowComponent implements OnInit {
 
   getCurrentMemory() {
     this.app.request("getCurrentMemory", memory => {
-      console.log(memory)
       this.memoryValue = memory
     }, this.modPackId)
   }

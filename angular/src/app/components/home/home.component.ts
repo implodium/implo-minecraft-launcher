@@ -68,4 +68,8 @@ export class HomeComponent implements OnInit {
       this.settingsWindow.open(this.modPackId)
     }
   }
+
+  changeInstallState(installState: InstanceState) {
+    this.instanceState = installState
+  }
 }
