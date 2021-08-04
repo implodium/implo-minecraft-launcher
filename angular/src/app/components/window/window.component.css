@@ -43,6 +43,8 @@
 #window-content {
   width: 80%;
   height: 70%;
+
+  overflow-y: scroll;
 }
 
 #window-switch {
