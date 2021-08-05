@@ -1,7 +1,7 @@
 {
   "name": "implo-launcher",
   "version": "1.0.0",
-  "main": "electron/src/index.js",
+  "main": "electron/bundle.js",
   "scripts": {
     "init": "npm run angular:watch",
     "start": "npm run electron:dev",
@@ -12,8 +12,8 @@
     "package:win": "npm run clean && (cd angular && npm run build && cd ..) && (cd electron && npm run package:win && cd ..)"
   },
   "devDependencies": {
-    "electron": "^13.1.2",
     "electron-packager": "^15.2.0",
-    "typescript": "^4.3.2"
+    "typescript": "^4.3.2",
+    "electron": "^13.1.8"
   }
 }

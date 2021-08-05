@@ -33,7 +33,7 @@ export default class ElectronController {
 
         this._window.loadURL(
             url.format({
-                pathname: path.join(__dirname, '../../../angular/index.html'),
+                pathname: path.join(__dirname, '../angular/index.html'),
                 protocol: 'file',
                 slashes: true
             })
