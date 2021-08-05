@@ -226,7 +226,6 @@ export default class ModPackController {
     }
 
     cancelInstallation() {
-        console.log(this.installations.length)
         this.installations[this.installations.length - 1].cancelled = true;
     }
 
