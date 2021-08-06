@@ -4,6 +4,7 @@ module.exports = {
     context: path.resolve(__dirname, 'src'),
     entry: './index.ts',
     target: 'electron-main',
+    mode: "development",
     module: {
         rules: [
             {
@@ -18,5 +19,10 @@ module.exports = {
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, '../dist/electron')
-    }
+    },
+    ignoreWarnings: [
+        {
+            module: /cpu.js/
+        }
+    ]
 }
