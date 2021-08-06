@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "main": "electron/bundle.js",
   "scripts": {
-    "init": "npm run angular:watch",
-    "start": "npm run electron:dev",
+    "init": "npm run clean && mkdir dist &&  cp package.json dist/package.json && npm run angular:watch & npm run electron:watch",
+    "start": "electron dist",
     "clean": "rm -rf release && rm -rf dist",
     "angular:watch": "(cd angular && npm run watch)",
-    "electron:dev": "(cd electron && npm run dev)",
+    "electron:watch": "(cd electron && npm run watch)",
     "package:mac": "npm run clean && (cd angular && npm run build) && (cd electron && npm run package:mac)",
     "package:win": "npm run clean && (cd angular && npm run build && cd ..) && (cd electron && npm run package:win && cd ..)"
   },
