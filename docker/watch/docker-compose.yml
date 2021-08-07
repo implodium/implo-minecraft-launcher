@@ -1,0 +1,9 @@
+version: '3.3'
+
+services: 
+    implo-launcher-watch: 
+        image: implo-launcher:watch
+        container_name: implo-launcher-watch
+        build: . 
+        volumes:
+            - ../../:/app/

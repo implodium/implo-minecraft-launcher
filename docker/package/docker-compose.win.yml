@@ -1,0 +1,11 @@
+version: '3.3'
+
+services: 
+    implo-launcher-package-win: 
+        image: implo-launcher:package
+        container_name: implo-launcher-package-win
+        build: . 
+        volumes:
+            - ../../:/app/
+        environment: 
+            TARGET: win

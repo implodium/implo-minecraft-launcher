@@ -3,13 +3,17 @@
   "version": "1.0.0",
   "main": "electron/bundle.js",
   "scripts": {
-    "init": "npm run clean && mkdir dist &&  cp package.json dist/package.json && npm run angular:watch & npm run electron:watch",
+    "watch": "docker-compose -p implo-launcher -f docker/watch/docker-compose.yml up",
     "start": "electron dist",
+    "package:mac": "docker-compose -p implo-launcher -f docker/package/docker-compose.mac.yml up",
+    "package:win": "docker-compose -p implo-launcher -f docker/package/docker-compose.win.yml up",
+
     "clean": "rm -rf release && rm -rf dist",
     "angular:watch": "(cd angular && npm run watch)",
     "electron:watch": "(cd electron && npm run watch)",
-    "package:mac": "npm run clean && (cd angular && npm run build) && (cd electron && npm run package:mac)",
-    "package:win": "npm run clean && (cd angular && npm run build && cd ..) && (cd electron && npm run package:win && cd ..)"
+    "docker:package:mac": "npm run clean && (cd angular && npm run build) && (cd electron && npm run package:mac)",
+    "docker:package:win": "npm run clean && (cd angular && npm run build && cd ..) && (cd electron && npm run package:win && cd ..)",
+    "docker:init": "npm run clean && mkdir dist &&  cp package.json dist/package.json && npm run angular:watch & npm run electron:watch"
   },
   "devDependencies": {
     "electron-packager": "^15.2.0",
