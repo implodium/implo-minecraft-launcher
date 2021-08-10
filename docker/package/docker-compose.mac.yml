@@ -7,5 +7,7 @@ services:
         build:
             context: ../..
             dockerfile: docker/package/Dockerfile
+        volumes:
+            -   ../../release/mac:/app/release
         environment:
             TARGET: mac

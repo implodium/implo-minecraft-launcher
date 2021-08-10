@@ -8,6 +8,6 @@ services:
             context: ../..
             dockerfile: docker/package/Dockerfile
         volumes:
-            - ../../release:/app/release
+            -  ../../release/win:/app/release
         environment:
             TARGET: win
