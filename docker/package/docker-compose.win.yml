@@ -1,11 +1,13 @@
 version: '3.3'
 
-services: 
-    implo-launcher-package-win: 
+services:
+    implo-launcher-package-win:
         image: implo-launcher:package
         container_name: implo-launcher-package-win
-        build: . 
+        build:
+            context: ../..
+            dockerfile: docker/package/Dockerfile
         volumes:
-            - ../../:/app/
-        environment: 
+            - ../../release:/app/release
+        environment:
             TARGET: win

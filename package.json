@@ -6,14 +6,14 @@
     "start": "electron .",
     "watch": "docker-compose -p implo-launcher -f docker/watch/docker-compose.yml up --build",
     "watch:clean": "npm run clean && docker-compose -p implo-launcher -f docker/watch/docker-compose.yml up --build",
-    "package:mac": "docker-compose -p implo-launcher -f docker/package/docker-compose.mac.yml up",
-    "package:win": "docker-compose -p implo-launcher -f docker/package/docker-compose.win.yml up",
+    "package:mac": "docker-compose -p implo-launcher -f docker/package/docker-compose.mac.yml up --build",
+    "package:win": "docker-compose -p implo-launcher -f docker/package/docker-compose.win.yml up --build",
     "clean": "rm -rf release && rm -rf dist",
 
     "angular:watch": "(cd angular && npm run watch)",
     "electron:watch": "(cd electron && npm run watch)",
-    "docker:package:mac": "npm run clean && (cd angular && npm run build) && (cd electron && npm run package:mac)",
-    "docker:package:win": "npm run clean && (cd angular && npm run build && cd ..) && (cd electron && npm run package:win && cd ..)"
+    "docker:package:mac": "(cd angular && npm run build) && (cd electron && npm run package:mac)",
+    "docker:package:win": "(cd angular && npm run build) && (cd electron && npm run package:win)"
   },
   "devDependencies": {
     "electron": "^13.1.8",

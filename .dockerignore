@@ -1,9 +1,4 @@
 node_modules
-electron/node_modules
-electron/src
-angular/node_modules
-angular/src
 docker
-dist
 release
 .git
