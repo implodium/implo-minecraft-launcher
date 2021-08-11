@@ -1,21 +1,13 @@
 version: '3.3'
 
 services:
-    implo-launcher-electron-watch:
-        image: implo-launcher-electron:watch
-        container_name: implo-launcher-electron-watch
+    implo-launcher-watch:
+        image: implo-launcher:watch
+        container_name: implo-launcher-watch
         build:
             context: ../..
-            dockerfile: docker/watch/electron.Dockerfile
+            dockerfile: docker/watch/Dockerfile
         volumes:
             - ../../electron/src:/app/electron/src
-            - ../../dist/electron:/app/dist/electron
-    implo-launcher-angular-watch:
-        image: implo-launcher-angular:watch
-        container_name: implo-launcher-angular-watch
-        build:
-            context: ../..
-            dockerfile: docker/watch/angular.Dockerfile
-        volumes:
             - ../../angular/src:/app/angular/src
-            - ../../dist/angular:/app/dist/angular
+            - ../../dist:/app/dist
