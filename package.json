@@ -5,9 +5,11 @@
   "scripts": {
     "start": "electron dist",
     "watch": "docker-compose -p implo-launcher -f docker/watch/docker-compose.yml up --build",
-    "watch:clean": "npm run clean && docker-compose -p implo-launcher -f docker/watch/docker-compose.yml up --build",
     "package:mac": "docker-compose -p implo-launcher -f docker/package/docker-compose.mac.yml up --build",
     "package:win": "docker-compose -p implo-launcher -f docker/package/docker-compose.win.yml up --build",
+    "watch:clean": "npm run clean && docker-compose -p implo-launcher -f docker/watch/docker-compose.yml up --build",
+    "package:mac:clean": "npm run clean && docker-compose -p implo-launcher -f docker/package/docker-compose.mac.yml up --build",
+    "package:win:clean": "npm run clean && docker-compose -p implo-launcher -f docker/package/docker-compose.win.yml up --build",
     "clean": "rm -rf release && rm -rf dist",
 
     "angular:watch": "(cd angular && npm run watch)",
