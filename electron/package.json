@@ -2,8 +2,8 @@
   "name": "implo-launcher-electron",
   "version": "1.0.0",
   "scripts": {
-    "watch": "mkdir ../dist/electron && webpack --watch",
-    "build": "webpack --mode=production && cp ../package.json ../dist/",
+    "watch": "cp ../package.json ../dist/ && webpack --watch",
+    "build": "cp ../package.json ../dist/ && webpack --mode=production",
     "package:mac": "npm run build && electron-packager ../dist --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=../release",
     "package:win": "npm run build && electron-packager ../dist --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=../release"
   },

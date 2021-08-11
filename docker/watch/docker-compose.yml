@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+    implo-launcher-watch:
+        image: implo-launcher:watch
+        container_name: implo-launcher-watch
+        build:
+            context: ../..
+            dockerfile: docker/watch/Dockerfile
+        volumes:
+            - ../../electron/src:/app/electron/src
+            - ../../angular/src:/app/angular/src
+            - ../../dist:/app/dist

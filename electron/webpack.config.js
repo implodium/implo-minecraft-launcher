@@ -24,5 +24,8 @@ module.exports = {
         {
             module: /cpu.js/
         }
-    ]
+    ],
+    watchOptions: {
+        poll: 1000
+    }
 }

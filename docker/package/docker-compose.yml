@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+    package-mac:
+        image: implo-launcher:package
+        container_name: implo-launcher-package-mac
+        build:
+            context: ../..
+            dockerfile: docker/package/Dockerfile
+        volumes:
+            -   ../../release/mac:/app/release
+        environment:
+            TARGET: mac
+    package-win:
+        image: implo-launcher:package
+        container_name: implo-launcher-package-win
+        build:
+            context: ../..
+            dockerfile: docker/package/Dockerfile
+        volumes:
+            - ../../release/win:/app/release
+        environment:
+            TARGET: win
