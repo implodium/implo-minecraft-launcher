@@ -15,7 +15,7 @@ export class ConfigurationController {
                 id: "summer2021",
                 name: 'Summer 2021',
                 logo: 'img/summer2021.jpg',
-                installUrl: "https://github.com/QuirinEcker/summer2021/releases/download/1.5/summer2021.zip",
+                installUrl: "https://github.com/implodium/minecraft-low-on-time/releases/download/0.5/summer2021.zip",
                 memory: 8,
                 mineCraftOpt: {
                     created: "1970-01-01T00:00:00.000Z",
