@@ -10,7 +10,7 @@ import {SettingsWindowComponent} from "../settings-window/settings-window.compon
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  modPackName: string = 'invalid Name';
+  modPackName: string = '';
   logoSrc: string = "";
   imageFound: boolean = true
   modPackId: string = "";
@@ -40,6 +40,10 @@ export class HomeComponent implements OnInit {
           this.instanceState = InstanceState.installed
         }
       }, modPackConfig.id)
+    })
+
+    this.app.request('getLastModPack_reject', err => {
+      this.modPackName = 'invalid modpack'
     })
   }
 

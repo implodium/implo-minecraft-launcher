@@ -132,7 +132,7 @@ export default class App {
                 functionCallBack(event, resolve, reject, args)
             })
                 .then(value => event.sender.send(name, value))
-                .catch(console.log)
+                .catch(err => event.sender.send(`${name}_reject`))
         })
     }
 
