@@ -1,0 +1,7 @@
+node_modules
+electron/node_modules
+angular/node_modules
+docker
+dist
+release
+.git

@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "ng serve",
-    "watch": "mkdir ../dist/angular && ng build --base-href ./ --watch --configuration development",
+    "watch": "ng build --base-href ./ --poll=1000 --watch --configuration development",
     "build": "ng build --base-href ./ --configuration production"
   },
   "private": true,

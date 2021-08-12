@@ -26,7 +26,7 @@ export class SetupComponent implements OnInit {
     this.appService.send("quit");
   }
 
-  install() {
+  next() {
     this.loading = true;
     this.appService.request("installBase", () => {
       this.router.navigate([""])
