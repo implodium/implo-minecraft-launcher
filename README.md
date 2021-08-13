@@ -15,6 +15,9 @@ installation already present.
 ### Requirements
 
 - Docker
+- Docker Compose
+- NPM
+- NodeJS
 - Git Bash (for clean option, not mandatory)
 
 ### Development
