@@ -102,15 +102,15 @@ export class ConfigurationController {
                 .then(config => {
                     this.minecraftLauncherConfiguration
                         .then(mcConfig => {
+                            console.log(mcConfig)
                             this.getmodPackConfigBy(config.lastModPackID)
                                 .then(modPackConfig => {
                                     mcConfig.profiles[config.lastModPackID]
                                         = modPackConfig.mineCraftOpt
 
-                                    resolve()
-
                                     this.writeMinecraftLauncherConfiguration(mcConfig)
                                         .catch(reject)
+                                        .then(resolve)
                                 })
                         })
                         .catch(reject)
