@@ -29,7 +29,7 @@ export default class FileController {
 
     private readonly mineCraftLauncherPaths = {
         mac: new Path('/Applications/Minecraft.app'),
-        win: new Path('C:\\Program Files (x86)\\Minecraft Launcher\\')
+        win: new Path('C:\\Program Files (x86)\\Minecraft')
     }
 
     private installPercentage: number = 0
