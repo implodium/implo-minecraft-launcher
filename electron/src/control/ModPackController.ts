@@ -7,7 +7,6 @@ import Installation from "../uitl/Installation";
 import {Observable} from "rxjs";
 import InstallationStatus from "../uitl/InstallationStatus";
 import MinecraftLauncherProfiles from "../uitl/MinecraftLauncherProfiles";
-import { resolve } from "../../webpack.config";
 
 @injectable()
 export default class ModPackController {
@@ -223,12 +222,12 @@ export default class ModPackController {
                     ))
 
                     allFinished.push(this.fileController.deleteFolder(
-                        installPath.relativeToPath(`instances/_MACOSX`)
+                        installPath.relativeToPath(`instances/__MACOSX`)
                     ))
-        
+
                     Promise.all(allFinished)
                         .then(() => resolve(installation))
-                        .catch(err => console.log)
+                        .catch(reject)
                 })
         })
     }
