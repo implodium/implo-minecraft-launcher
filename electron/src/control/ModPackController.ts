@@ -29,6 +29,7 @@ export default class ModPackController {
             .then(installation => this.extract(installation))
             .then(installation => this.copying(installation))
             .then(installation => this.finish(installation))
+            .then(installation => this.cleanUp(installation))
             .catch(console.log)
 
         return installation.stream
@@ -205,6 +206,30 @@ export default class ModPackController {
             .relativeToPath(`libraries/net/minecraftforge/forge/${libraryName}`)
 
         return this.fileController.copy(from, to)
+    }
+
+    private cleanUp(installation: Installation): Promise<Installation> {
+        return new Promise((resolve, reject) => {
+            installation.getConfiguration()
+                .then(config => {
+                    const allFinished = new Array<Promise<void>>()
+                    const installPath = this.pathController
+                                            .installPath
+                                            .path
+
+                    allFinished.push(this.fileController.deleteFile(
+                        installPath.relativeToPath(`instances/${config.id}.zip`)
+                    ))
+
+                    allFinished.push(this.fileController.deleteFolder(
+                        installPath.relativeToPath(`instances/__MACOSX`)
+                    ))
+
+                    Promise.all(allFinished)
+                        .then(() => resolve(installation))
+                        .catch(reject)
+                })
+        })
     }
 
     deleteBy(id: string): Promise<void> {
