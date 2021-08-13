@@ -2,7 +2,7 @@
 
 ## About
 
-Launcher for the minecraft project 'Low on Time'. The launcher will download the mod pack from GitHub and adjust add 
+A launcher for the minecraft project 'Low on Time'. The launcher will download the mod pack from GitHub and adjust add 
 the minecraft launcher profiles. This way one can play press play and open the minecraft launcher with the 
 installation already present.
 
