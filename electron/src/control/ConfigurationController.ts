@@ -14,7 +14,7 @@ export class ConfigurationController {
             {
                 id: "summer2021",
                 name: '',
-                logo: 'img/low_on_time_logo.svg',
+                logo: 'img/low_on_time_logo.png',
                 installUrl: "https://github.com/implodium/minecraft-low-on-time/releases/download/0.5/summer2021.zip",
                 memory: 8,
                 mineCraftOpt: {
