@@ -4,8 +4,8 @@
   "scripts": {
     "watch": "cp ../package.json ../dist/ && webpack --watch",
     "build": "cp ../package.json ../dist/ && webpack --mode=production",
-    "package:mac": "npm run build && electron-packager ../dist --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=../release",
-    "package:win": "npm run build && electron-packager ../dist --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=../release"
+    "package:mac": "npm run build && electron-packager ../dist --overwrite --platform=darwin --arch=x64 --icon=../img/low_on_time_logo.icns --prune=true --out=../release",
+    "package:win": "npm run build && electron-packager ../dist --overwrite --platform=win32 --arch=ia32 --icon=../img/low_on_time_logo.ico --prune=true --out=../release"
   },
   "devDependencies": {
     "@types/assert": "^1.5.5",
