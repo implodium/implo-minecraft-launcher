@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit {
       this.memory = modPackConfig.memory;
 
       console.log(modPackConfig)
+      console.log(this.logoPath)
 
       this.app.request('checkModPackInstallation', isInstalled => {
         if(isInstalled) {
