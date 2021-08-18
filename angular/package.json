@@ -4,19 +4,22 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "ng serve",
-    "watch": "ng build --base-href ./ --watch --configuration development",
+    "watch": "ng build --base-href ./ --poll=1000 --watch --configuration development",
     "build": "ng build --base-href ./ --configuration production"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "~12.0.3",
+    "@angular/cdk": "^12.1.1",
     "@angular/common": "~12.0.3",
     "@angular/compiler": "~12.0.3",
     "@angular/core": "~12.0.3",
     "@angular/forms": "~12.0.3",
+    "@angular/material": "^12.1.1",
     "@angular/platform-browser": "~12.0.3",
     "@angular/platform-browser-dynamic": "~12.0.3",
     "@angular/router": "~12.0.3",
+    "hammerjs": "^2.0.8",
     "ngx-electron": "^2.2.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
@@ -33,7 +36,7 @@
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
-    "typescript": "^4.2.4",
-    "karma-jasmine-html-reporter": "^1.5.0"
+    "karma-jasmine-html-reporter": "^1.5.0",
+    "typescript": "^4.2.4"
   }
 }

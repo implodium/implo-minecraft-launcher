@@ -4,9 +4,18 @@ import * as fs from "fs";
 import * as wget from 'wget-improved'
 import {IpcMainEvent} from 'electron'
 import * as child_process from 'child_process'
+import InstallationStatus from "../uitl/InstallationStatus";
+import {injectable} from "inversify";
+import LauncherConfiguration from "../uitl/LauncherConfiguration";
+import {Observable} from "rxjs";
+import * as si from "systeminformation"
+import MemoryInfo from "../uitl/MemoryInfo";
 const fsExtra = require('fs-extra')
 const zip = require('onezip')
+const rimraf = require('rimraf')
+const openExplorer = require('open-file-explorer')
 
+@injectable()
 export default class FileController {
     private readonly installationPaths = {
         mac: new Path(`/Users/${os.userInfo().username}/Library/ApplicationSupport/.implo-launcher/`),
@@ -20,38 +29,19 @@ export default class FileController {
 
     private readonly mineCraftLauncherPaths = {
         mac: new Path('/Applications/Minecraft.app'),
-        win: new Path('C:\\Program Files (x86)\\Minecraft Launcher\\')
+        win: new Path('C:\\Program Files (x86)\\Minecraft')
     }
 
     private installPercentage: number = 0
 
-    installBase(): Promise<void[]> {
+    installBase(config: LauncherConfiguration): Promise<void[]> {
         let finished: Array<Promise<void>> = []
         finished.push(new Promise((resolve, reject) => {
             fs.mkdir(this.installPath.toString(), (err: any) => {
                 if (!err) {
                     resolve()
                     finished.push(new Promise((resolve, reject) => {
-                        fs.writeFile(this.installPath.relativeToPath('launcher-config.json'), JSON.stringify({
-                            modPacks: {
-                                summer2021: {
-                                    id: "summer2021",
-                                    name: 'Summer 2021',
-                                    logo: 'img/summer2021.jpg',
-                                    installUrl: "https://github.com/QuirinEcker/summer2021/releases/download/1.5/summer2021.zip",
-                                    mineCraftOpt: {
-                                        created: "1970-01-01T00:00:00.000Z",
-                                        gameDir: this.installPath.relativeToPath('instances/summer2021'),
-                                        icon: "Furnace",
-                                        javaArgs: "-Xmx8G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M",
-                                        lastVersionId: "1.12.2-forge-14.23.5.2855",
-                                        name: "summer2021",
-                                        type: "custom"
-                                    }
-                                }
-                            },
-                            lastModPack: "summer2021"
-                        }), err => {
+                        fs.writeFile(this.installPath.relativeToPath('launcher-config.json'), JSON.stringify(config), err => {
                             if (!err) {
                                 resolve()
                             } else {
@@ -284,13 +274,35 @@ export default class FileController {
         })
     }
 
+    copy(from: string, to: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            fsExtra.copy(from, to, (err: any) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve()
+                }
+            })
+        })
+
+    }
+
     addInstallPercentage(percentage: number, event: IpcMainEvent) {
         this.installPercentage += percentage
-        event.sender.send('installationPercentage', this.installPercentage.toString())
+
+        this.sendInstallPercentage(percentage, event)
     }
 
     sendInstallPercentage(percentage: number, event: IpcMainEvent) {
-        event.sender.send('installationPercentage', percentage)
+
+        const installationStatus: InstallationStatus = {
+            stepPercentage: 0,
+            percentage:  percentage,
+            installationStep: 'installing',
+            finished: false
+        }
+
+        event.sender.send('installationStatus', JSON.stringify(installationStatus))
     }
 
     openMinecraftLauncher(): Promise<void> {
@@ -309,5 +321,85 @@ export default class FileController {
         } else {
             return 'OS not supported'
         }
+    }
+
+    folderExists(path: string): Promise<boolean> {
+        return new Promise((resolve) => {
+            fs.access(path, (err: any) => {
+                if (!err) {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                }
+            })
+        })
+    }
+
+    download(url: string, to: string): Observable<number> {
+        return new Observable<number>(subscriber => {
+            wget.download(url, to)
+                .on('progress', percentage => {
+                    subscriber.next(Math.round(percentage * 100))
+                })
+                .on('end', () => {
+                    subscriber.complete()
+                })
+                .on('error', err => {
+                    subscriber.error(err)
+                })
+        })
+    }
+
+    extract(file: string, to: string): Observable<number> {
+        return new Observable<number>(subscriber => {
+            zip.extract(file, to)
+                .on('end', () => {
+                    subscriber.complete()
+                })
+                .on('error', (error: any) => {
+                    subscriber.error(error)
+                })
+                .on('progress', (percentage:any) => {
+                    subscriber.next(percentage)
+                })
+        })
+    }
+
+    getMemoryInfo() {
+        return new Promise((resolve, reject) => {
+            si.mem()
+                .then((memoryInfo: MemoryInfo) => {
+                    resolve(memoryInfo.total)
+                })
+                .catch(reject)
+        })
+    }
+
+    deleteFolder(path: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            rimraf(path, (err: any) => {
+                if (!err) {
+                    resolve()
+                } else {
+                    reject(err)
+                }
+            })
+        })
+    }
+
+    openFolder(path: string) {
+        openExplorer(path)
+    }
+
+    deleteFile(path: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            fs.unlink(path, (err) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve()
+                }
+            })
+        })
     }
 }

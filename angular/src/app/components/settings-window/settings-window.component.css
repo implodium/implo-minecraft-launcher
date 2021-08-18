@@ -1,0 +1,37 @@
+#memory-section > * {
+  margin: 2vh 0;
+}
+
+#memory-section-content {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#memory-section-content > * {
+  margin: 0 1vw;
+}
+
+.button {
+  background-color: #42b983;
+  padding: 1vw;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-button {
+  background-color: #C02942;
+}
+
+.success-button {
+  background-color: #42b983;
+}
+
+mat-slider {
+  width: 50%;
+}

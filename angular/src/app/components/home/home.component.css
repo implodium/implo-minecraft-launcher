@@ -14,7 +14,7 @@
 }
 
 #container img {
-  height: 20vh;
+  height: 40vh;
 }
 
 #free-container {
@@ -38,4 +38,20 @@
   -moz-box-shadow: 0 0 5px 0 rgba(0,0,0,0.75);
 
   cursor: pointer;
+}
+
+.nav-elem {
+  margin: 0 1vw;
+  cursor: pointer;
+}
+
+.nav-elem input {
+  background-color: grey;
+  border-radius: 2px;
+  border: none;
+  padding: 2vh;
+}
+
+.nav-elem mat-icon {
+  color: grey;
 }

@@ -2,18 +2,33 @@
   "name": "implo-launcher-electron",
   "version": "1.0.0",
   "scripts": {
-    "build": "tsc && cp -r node_modules ../dist/electron && cp ../package.json ../dist/",
-    "dev": "npm run build && electron ../dist",
-    "clean": "cd .. && rm -rf release",
-    "package:mac": "npm run clean && npm run build && electron-packager ../dist --overwrite --platform=darwin --arch=x64 --icon=images/icon.png --prune=true --out=../release",
-    "package:win": "npm run clean && npm run build && electron-packager ../dist --overwrite --platform=win32 --arch=ia32 --icon=images/icon.png --prune=true --out=../release"
+    "watch": "cp ../package.json ../dist/ && webpack --watch",
+    "build": "cp ../package.json ../dist/ && webpack --mode=production",
+    "package:mac": "npm run build && electron-packager ../dist --overwrite --platform=darwin --arch=x64 --icon=../img/low_on_time_logo.icns --prune=true --out=../release",
+    "package:win": "npm run build && electron-packager ../dist --overwrite --platform=win32 --arch=ia32 --icon=../img/low_on_time_logo.ico --prune=true --out=../release"
   },
   "devDependencies": {
-    "typescript": "^4.3.2"
+    "@types/assert": "^1.5.5",
+    "@types/fs-extra": "^9.0.12",
+    "@types/node": "^16.4.12",
+    "@types/rimraf": "^3.0.1",
+    "@types/webpack": "^5.28.0",
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.3.5",
+    "webpack": "^5.48.0",
+    "webpack-cli": "^4.7.2",
+    "electron": "^13.1.8"
   },
   "dependencies": {
+    "assert": "^2.0.0",
     "fs-extra": "^10.0.0",
+    "inversify": "^5.1.1",
     "onezip": "^5.0.0",
+    "open-file-explorer": "^1.0.2",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^7.1.0",
+    "systeminformation": "^5.7.7",
     "wget-improved": "^3.2.1"
   }
 }

@@ -11,6 +11,15 @@ import { MainComponent } from './components/main/main.component';
 import {NgxElectronModule} from "ngx-electron";
 import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
 import { HomeComponent } from './components/home/home.component';
+import { InstallPromptComponent } from './components/install-prompt/install-prompt.component';
+import {MatIconModule} from "@angular/material/icon";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatSliderModule} from "@angular/material/slider";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatInputModule} from "@angular/material/input";
+import { SettingsWindowComponent } from './components/settings-window/settings-window.component';
+import { WindowComponent } from './components/window/window.component';
 
 @NgModule({
   declarations: [
@@ -19,14 +28,24 @@ import { HomeComponent } from './components/home/home.component';
     SetupComponent,
     MainComponent,
     LoadingScreenComponent,
-    HomeComponent
+    HomeComponent,
+    InstallPromptComponent,
+    SettingsWindowComponent,
+    WindowComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    RouterModule.forRoot(Routes),
-    NgxElectronModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        AppRoutingModule,
+        RouterModule.forRoot(Routes),
+        NgxElectronModule,
+        MatIconModule,
+        FormsModule,
+        MatSliderModule,
+        MatProgressBarModule,
+        MatInputModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

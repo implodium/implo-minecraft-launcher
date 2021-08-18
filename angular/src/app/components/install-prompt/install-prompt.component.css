@@ -1,0 +1,147 @@
+#prompt-container {
+  z-index: 5;
+  background-color: rgba(0,0,0,0.60);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100vw;
+  height: 100vh;
+}
+
+#prompt {
+  width: 70vw;
+  height: 70vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  background-color: white;
+}
+
+#prompt-top-nav {
+  width: 90%;
+  height: 10%;
+  padding: 0 5%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-elem-button {
+  cursor: pointer;;
+}
+
+#prompt-content {
+  width: 80%;
+  height: 70%;
+}
+
+#page-switch {
+  width: 100%;
+  height: 100%;
+}
+
+#prompt-bottom-nav {
+  width: 90%;
+  height: 20%;
+  padding: 5%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#prompt-bottom-nav .button {
+  width: 10vw;
+  height: 5vh;
+
+  color: white;
+  text-transform: uppercase;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#prompt-bottom-nav .red-button {
+  background-color: #C02942;
+}
+
+#prompt-bottom-nav .green-button {
+  background-color: #42b983;
+}
+
+.prompt-content h1 {
+  font-size: 5vh;
+  height: 10%;
+}
+
+#prompt-content-2 {
+  display: flex;
+  flex-direction: column;
+}
+
+#memory-content {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#memory-content-slider {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-direction: row;
+}
+
+#memory-content-value {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+#memory-content-value input {
+  width: 3vw;
+  margin-right: 0.5vw;
+}
+
+.mat-slider {
+  width: 90%;
+  margin: 0 3%;
+}
+
+#prompt-content-3 {
+  width: 100%;
+  height: 100%;
+}
+
+#install-content-progress {
+  height: 90%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#install-content-progress * {
+  margin: 1vh 0;
+}

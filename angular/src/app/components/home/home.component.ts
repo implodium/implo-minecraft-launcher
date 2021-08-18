@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AppService} from "../services/app.service";
-import InstallationState from "../../util/InstallationState";
+import InstanceState from "../../util/InstanceState";
+import {InstallPromptComponent} from "../install-prompt/install-prompt.component";
+import {SettingsWindowComponent} from "../settings-window/settings-window.component";
 
 @Component({
   selector: 'app-home',
@@ -8,13 +10,19 @@ import InstallationState from "../../util/InstallationState";
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  modPackName: string = 'invalid Name';
+  modPackName: string = '';
   logoSrc: string = "";
   imageFound: boolean = true
   modPackId: string = "";
-  InstallationState = InstallationState
-  installationState = InstallationState.notInstalled
-  percentage: number = 0
+  InstanceState = InstanceState
+  instanceState = InstanceState.notInstalled
+  memory: number = -1;
+
+  @ViewChild(InstallPromptComponent)
+  installPrompt?: InstallPromptComponent
+
+  @ViewChild(SettingsWindowComponent)
+  settingsWindow?: SettingsWindowComponent
 
   constructor(private app: AppService) { }
 
@@ -23,35 +31,50 @@ export class HomeComponent implements OnInit {
       this.modPackName = modPackConfig.name;
       this.logoSrc = modPackConfig.logo;
       this.modPackId = modPackConfig.id;
+      this.memory = modPackConfig.memory;
+
+      console.log(modPackConfig)
+      console.log(this.logoPath)
 
       this.app.request('checkModPackInstallation', isInstalled => {
         if(isInstalled) {
-          this.installationState = InstallationState.installed
+          this.instanceState = InstanceState.installed
         }
       }, modPackConfig.id)
+    })
 
-      this.app.on('installationPercentage', percentage => {
-        this.percentage = percentage;
-      })
+    this.app.request('getLastModPack_reject', err => {
+      this.modPackName = 'invalid modpack'
     })
   }
 
   get logoPath(): string {
-      return `assets/${this.logoSrc}`
+    return `assets/${this.logoSrc}`
   }
 
-  installMinecraftModPack() {
-    this.installationState = InstallationState.installing
-    this.app.request('installMinecraftModPack', () => {
-      setTimeout(() => {
-        this.installationState = InstallationState.installed
-      }, 1000)
-    }, this.modPackId)
+  openInstallPrompt() {
+    if (this.installPrompt) {
+      this.installPrompt.open(this.modPackId)
+    }
   }
 
   startMinecraftModPack() {
     this.app.request('startMinecraftModPack', () => {
       this.app.request("quit", () => { })
     })
+  }
+
+  changeToInstallState() {
+    this.instanceState = InstanceState.installed
+  }
+
+  openSettings() {
+    if (this.settingsWindow) {
+      this.settingsWindow.open(this.modPackId, this.instanceState)
+    }
+  }
+
+  changeInstallState(installState: InstanceState) {
+    this.instanceState = installState
   }
 }

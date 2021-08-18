@@ -1,21 +1,27 @@
 {
   "name": "implo-launcher",
   "version": "1.0.0",
-  "workspaces": [
-    "electron",
-    "angular"
-  ],
-  "main": "electron/src/index.js",
+  "main": "electron/bundle.js",
   "scripts": {
-    "init": "npm run angular:watch",
-    "start": "npm run electron:dev",
+    "start": "electron dist",
+    "watch": "docker-compose -p implo-launcher -f docker/watch/docker-compose.yml up --build",
+    "package:mac": "docker-compose -p implo-launcher -f docker/package/docker-compose.yml up --build package-mac",
+    "package:win": "docker-compose -p implo-launcher -f docker/package/docker-compose.yml up --build package-win",
+    "package:all": "docker-compose -p implo-launcher -f docker/package/docker-compose.yml up --build",
+    "watch:clean": "npm run clean && npm run watch",
+    "package:mac:clean": "npm run clean && npm run package:mac",
+    "package:win:clean": "npm run clean && npm run package:win",
+    "package:all:clean": "npm run clean && npm run package:all",
+    "clean": "rm -rf release && rm -rf dist",
+
     "angular:watch": "(cd angular && npm run watch)",
-    "electron:dev": "(cd electron && npm run dev)",
-    "package:mac": "(cd angular && npm run build) && (cd electron && npm run package:mac)",
-    "package:win": "(cd angular && npm run build && cd ..) && (cd electron && npm run package:win && cd ..)"
+    "electron:watch": "(cd electron && npm run watch)",
+    "docker:watch": "npm run angular:watch & npm run electron:watch",
+    "docker:package:mac": "(cd angular && npm run build) && (cd electron && npm run package:mac)",
+    "docker:package:win": "(cd angular && npm run build) && (cd electron && npm run package:win)"
   },
   "devDependencies": {
-    "electron": "^13.1.2",
+    "electron": "^13.1.8",
     "electron-packager": "^15.2.0",
     "typescript": "^4.3.2"
   }
